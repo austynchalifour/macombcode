@@ -55,7 +55,8 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
-        error: "Could not send your message. Please email us instead.",
+        error:
+          "Could not save your message right now. Please email us instead.",
       },
       { status: 502 },
     );
