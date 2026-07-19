@@ -73,14 +73,16 @@ export async function sendSms({
     return { ok: false, error: "Could not reach SentDM." };
   }
 
-  let data: {
+  type SentDmResponse = {
     success?: boolean;
     data?: { recipients?: Array<{ message_id?: string }> };
     error?: { message?: string; code?: string };
-  } | null = null;
+  };
+
+  let data: SentDmResponse | null = null;
 
   try {
-    data = (await response.json()) as typeof data;
+    data = (await response.json()) as SentDmResponse;
   } catch {
     data = null;
   }
