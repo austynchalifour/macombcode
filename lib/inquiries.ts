@@ -11,12 +11,34 @@ export type Inquiry = {
   createdAt: string;
 };
 
+type BlobAccess = "public" | "private";
+
 const BLOB_PATH = "inquiries.json";
 const DATA_DIR = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "inquiries.json");
 
-function useBlobStore() {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
+function isVercelRuntime() {
+  return process.env.VERCEL === "1";
+}
+
+/** Blob is available via read-write token and/or OIDC store id on Vercel. */
+function hasBlobCredentials() {
+  return Boolean(
+    process.env.BLOB_READ_WRITE_TOKEN?.trim() ||
+      process.env.BLOB_STORE_ID?.trim(),
+  );
+}
+
+function shouldUseBlob() {
+  return hasBlobCredentials() || isVercelRuntime();
+}
+
+function configuredBlobAccess(): BlobAccess {
+  return process.env.BLOB_ACCESS === "private" ? "private" : "public";
+}
+
+function alternateAccess(access: BlobAccess): BlobAccess {
+  return access === "public" ? "private" : "public";
 }
 
 function sortNewest(inquiries: Inquiry[]) {
@@ -36,9 +58,15 @@ function parseInquiries(raw: string): Inquiry[] {
   }
 }
 
-async function readFromBlob(): Promise<Inquiry[]> {
+function missingBlobError() {
+  return new Error(
+    "Vercel Blob is not connected. In Vercel → Storage, create a Blob store, link it to this project, then redeploy.",
+  );
+}
+
+async function readFromBlob(access: BlobAccess): Promise<Inquiry[]> {
   const result = await get(BLOB_PATH, {
-    access: "private",
+    access,
     useCache: false,
   });
 
@@ -48,13 +76,28 @@ async function readFromBlob(): Promise<Inquiry[]> {
   return parseInquiries(raw);
 }
 
-async function writeToBlob(inquiries: Inquiry[]) {
+async function writeToBlob(inquiries: Inquiry[], access: BlobAccess) {
   await put(BLOB_PATH, `${JSON.stringify(inquiries, null, 2)}\n`, {
-    access: "private",
+    access,
     contentType: "application/json",
     addRandomSuffix: false,
     allowOverwrite: true,
   });
+}
+
+async function withBlobAccessFallback<T>(
+  operation: (access: BlobAccess) => Promise<T>,
+): Promise<T> {
+  const primary = configuredBlobAccess();
+  try {
+    return await operation(primary);
+  } catch (primaryError) {
+    try {
+      return await operation(alternateAccess(primary));
+    } catch {
+      throw primaryError;
+    }
+  }
 }
 
 async function ensureLocalStore() {
@@ -82,17 +125,21 @@ async function writeToFile(inquiries: Inquiry[]) {
 }
 
 export async function readInquiries(): Promise<Inquiry[]> {
-  if (useBlobStore()) {
-    return readFromBlob();
+  if (!shouldUseBlob()) {
+    return readFromFile();
   }
 
-  if (process.env.VERCEL) {
-    throw new Error(
-      "BLOB_READ_WRITE_TOKEN is missing. Create a Blob store in the Vercel project so inquiries can persist.",
-    );
+  try {
+    return await withBlobAccessFallback(readFromBlob);
+  } catch (error) {
+    if (!isVercelRuntime()) {
+      return readFromFile();
+    }
+    if (!hasBlobCredentials()) {
+      throw missingBlobError();
+    }
+    throw error;
   }
-
-  return readFromFile();
 }
 
 export async function addInquiry(input: {
@@ -111,15 +158,22 @@ export async function addInquiry(input: {
 
   inquiries.unshift(inquiry);
 
-  if (useBlobStore()) {
-    await writeToBlob(inquiries);
-  } else if (process.env.VERCEL) {
-    throw new Error(
-      "BLOB_READ_WRITE_TOKEN is missing. Create a Blob store in the Vercel project so inquiries can persist.",
-    );
-  } else {
+  if (!shouldUseBlob()) {
     await writeToFile(inquiries);
+    return inquiry;
   }
 
-  return inquiry;
+  try {
+    await withBlobAccessFallback((access) => writeToBlob(inquiries, access));
+    return inquiry;
+  } catch (error) {
+    if (!isVercelRuntime()) {
+      await writeToFile(inquiries);
+      return inquiry;
+    }
+    if (!hasBlobCredentials()) {
+      throw missingBlobError();
+    }
+    throw error;
+  }
 }

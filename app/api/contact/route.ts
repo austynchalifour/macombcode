@@ -57,6 +57,8 @@ export async function POST(request: Request) {
         ok: false,
         error:
           "Could not save your message right now. Please email us instead.",
+        detail:
+          error instanceof Error ? error.message : "Unknown storage error",
       },
       { status: 502 },
     );
