@@ -189,3 +189,88 @@ body {
 .field::placeholder {
   color: color-mix(in srgb, var(--ink-muted) 65%, transparent);
 }
+
+/* Cities service-area marquee */
+.cities-banner {
+  border-block: 1px solid color-mix(in srgb, var(--orange) 35%, transparent);
+}
+
+.cities-marquee {
+  overflow: hidden;
+  width: 100%;
+}
+
+.cities-marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 0;
+  animation: cities-scroll linear infinite;
+}
+
+.cities-marquee-track-reverse {
+  animation-name: cities-scroll-reverse;
+}
+
+.cities-banner:hover .cities-marquee-track {
+  animation-play-state: paused;
+}
+
+.cities-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding-inline: 0.35rem 0;
+  font-family: var(--font-bricolage), sans-serif;
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, #fff 88%, transparent);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.cities-marquee-item:hover {
+  color: var(--orange);
+}
+
+.cities-marquee-dot {
+  color: var(--orange);
+  font-size: 0.55em;
+  opacity: 0.85;
+}
+
+@keyframes cities-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes cities-scroll-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cities-marquee-track,
+  .cities-marquee-track-reverse {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    row-gap: 0.65rem;
+    column-gap: 0.25rem;
+    padding-inline: 1rem;
+  }
+
+  .cities-marquee-item[aria-hidden="true"] {
+    display: none;
+  }
+}

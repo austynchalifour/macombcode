@@ -16,7 +16,11 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Macomb Code | Websites & Software for Local Businesses",
+  metadataBase: new URL("https://macombcode.com"),
+  title: {
+    default: "Macomb Code | Websites & Software for Local Businesses",
+    template: "%s",
+  },
   description:
     "Macomb Code builds modern websites and custom software for local businesses across Macomb County and Metro Detroit.",
 };

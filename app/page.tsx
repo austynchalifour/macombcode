@@ -1,4 +1,5 @@
 import Approach from "@/components/Approach";
+import CitiesBanner from "@/components/CitiesBanner";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
@@ -10,6 +11,7 @@ export default function Home() {
     <>
       <main>
         <Hero />
+        <CitiesBanner />
         <Work />
         <Services />
         <Approach />

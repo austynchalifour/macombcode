@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 const links = [
-  { href: "#work", label: "Work" },
-  { href: "#services", label: "Services" },
-  { href: "#approach", label: "Approach" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#work", label: "Work" },
+  { href: "/#services", label: "Services" },
+  { href: "/cities", label: "Areas" },
+  { href: "/#approach", label: "Approach" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function Nav() {
@@ -16,7 +18,7 @@ export default function Nav() {
   return (
     <header className="relative z-20 w-full">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10">
-        <a href="#top" className="block w-[148px] shrink-0 md:w-[180px]">
+        <Link href="/" className="block w-[148px] shrink-0 md:w-[180px]">
           <Image
             src="/logo.png"
             alt="Macomb Code"
@@ -25,23 +27,23 @@ export default function Nav() {
             className="h-auto w-full"
             priority
           />
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-9 md:flex">
           {links.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
                 className="font-display text-sm font-semibold text-navy/70 transition-colors hover:text-orange"
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
           <li>
-            <a href="#contact" className="cta-primary !px-4 !py-2.5 text-sm">
+            <Link href="/#contact" className="cta-primary !px-4 !py-2.5 text-sm">
               Start a project
-            </a>
+            </Link>
           </li>
         </ul>
 
@@ -75,23 +77,23 @@ export default function Nav() {
           <ul className="flex flex-col gap-4">
             {links.map((link) => (
               <li key={link.href}>
-                <a
+                <Link
                   href={link.href}
                   className="font-display text-2xl font-bold text-navy"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
-          <a
-            href="#contact"
+          <Link
+            href="/#contact"
             className="cta-primary mt-6 inline-flex text-sm"
             onClick={() => setOpen(false)}
           >
             Start a project
-          </a>
+          </Link>
         </div>
       )}
     </header>
