@@ -46,6 +46,7 @@ export const projects: Project[] = [
     result:
       "A scalable calculator platform built for search — templated pages, structured data, and interactive tools designed to capture high-intent organic traffic at scale. Not a brochure site: a growth engine.",
     tone: "bg-band-b",
+    url: "https://calculatorsdepot.com/",
   },
   {
     name: "Etch A Sketch",
@@ -53,5 +54,6 @@ export const projects: Project[] = [
     result:
       "Exactly what it sounds like — a browser-based Etch A Sketch for a client who wanted something playful. Twist the knobs (or use your keyboard), draw on the classic gray screen, and shake to clear. Pure fun, built clean.",
     tone: "bg-band-c",
+    url: "https://etchasketch.app/",
   },
 ];

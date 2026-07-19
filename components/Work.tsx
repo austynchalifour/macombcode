@@ -11,7 +11,7 @@ export default function Work() {
               Projects that earn their keep.
             </h2>
             <p className="max-w-xs text-lg italic text-ink-muted md:text-right">
-              Selected work — from local business sites to search-driven platforms.
+              Click any project to open the live site or interactive demo.
             </p>
           </div>
         </Reveal>
@@ -20,14 +20,21 @@ export default function Work() {
       <ul>
         {projects.map((project, i) => {
           const href = project.url ?? "/#contact";
+          const hasProject = Boolean(project.url);
           const external = Boolean(project.url?.startsWith("http"));
+          const cta = !hasProject
+            ? "Start a project →"
+            : external
+              ? "Visit live site →"
+              : "Open demo →";
 
           return (
             <li key={project.name}>
               <Reveal>
                 <a
                   href={href}
-                  className={`work-band block ${project.tone} border-t border-navy/10`}
+                  aria-label={`${cta.replace(" →", "")}: ${project.name}`}
+                  className={`work-band group block cursor-pointer ${project.tone} border-t border-navy/10`}
                   {...(external
                     ? { target: "_blank", rel: "noopener noreferrer" }
                     : {})}
@@ -37,15 +44,15 @@ export default function Work() {
                       <p className="font-display text-xs font-bold uppercase tracking-[0.2em] text-orange">
                         0{i + 1} — {project.type}
                       </p>
-                      <h3 className="mt-2 font-display text-3xl font-extrabold tracking-[-0.03em] text-navy md:text-4xl">
+                      <h3 className="mt-2 font-display text-3xl font-extrabold tracking-[-0.03em] text-navy transition-colors group-hover:text-orange md:text-4xl">
                         {project.name}
                       </h3>
                       <p className="mt-3 max-w-xl text-lg leading-relaxed text-ink-muted">
                         {project.result}
                       </p>
                     </div>
-                    <span className="work-arrow shrink-0 font-display text-lg font-bold text-navy">
-                      {external ? "View project →" : "Start a project →"}
+                    <span className="work-arrow inline-flex shrink-0 items-center gap-2 border-b-2 border-orange pb-0.5 font-display text-lg font-bold text-navy">
+                      {cta}
                     </span>
                   </div>
                 </a>
