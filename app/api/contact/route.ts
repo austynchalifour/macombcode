@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendContactEmail } from "@/lib/email";
+import { addInquiry } from "@/lib/inquiries";
 
 type ContactBody = {
   name?: string;
@@ -48,9 +48,10 @@ export async function POST(request: Request) {
     );
   }
 
-  const emailResult = await sendContactEmail({ name, email, message });
-  if (!emailResult.ok) {
-    console.error("Contact email failed:", emailResult.error);
+  try {
+    await addInquiry({ name, email, message });
+  } catch (error) {
+    console.error("Failed to store inquiry:", error);
     return NextResponse.json(
       {
         ok: false,
