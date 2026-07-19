@@ -3,10 +3,13 @@
 import { useState, type FormEvent } from "react";
 import Reveal from "./Reveal";
 
-export default function Contact() {
-  const [status, setStatus] = useState<"idle" | "ready">("idle");
+type Status = "idle" | "sending" | "success" | "error";
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+export default function Contact() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -14,13 +17,36 @@ export default function Contact() {
     const email = String(data.get("email") || "").trim();
     const message = String(data.get("message") || "").trim();
 
-    const subject = encodeURIComponent(`Project inquiry from ${name || "website"}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\n${message}`,
-    );
+    setStatus("sending");
+    setError("");
 
-    setStatus("ready");
-    window.location.href = `mailto:info@macombcode.com?subject=${subject}&body=${body}`;
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      const payload = (await response.json()) as {
+        ok?: boolean;
+        error?: string;
+      };
+
+      if (!response.ok || !payload.ok) {
+        setStatus("error");
+        setError(
+          payload.error ||
+            "Could not send your message. Please email us instead.",
+        );
+        return;
+      }
+
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+      setError("Could not send your message. Please email us instead.");
+    }
   }
 
   return (
@@ -58,6 +84,7 @@ export default function Contact() {
                 autoComplete="name"
                 className="field mt-2"
                 placeholder="Your name"
+                disabled={status === "sending"}
               />
             </label>
 
@@ -72,6 +99,7 @@ export default function Contact() {
                 autoComplete="email"
                 className="field mt-2"
                 placeholder="you@business.com"
+                disabled={status === "sending"}
               />
             </label>
 
@@ -85,15 +113,34 @@ export default function Contact() {
                 rows={4}
                 className="field mt-2 resize-y"
                 placeholder="What are you looking to build?"
+                disabled={status === "sending"}
               />
             </label>
 
-            <button type="submit" className="cta-primary text-base">
-              Send message
+            <button
+              type="submit"
+              className="cta-primary text-base disabled:opacity-60"
+              disabled={status === "sending"}
+            >
+              {status === "sending" ? "Sending…" : "Send message"}
             </button>
 
-            {status === "ready" && (
-              <p className="text-sm text-ink-muted">Opening your email client…</p>
+            {status === "success" && (
+              <p className="text-sm font-medium text-navy">
+                Message sent — we&apos;ll be in touch shortly.
+              </p>
+            )}
+
+            {status === "error" && (
+              <p className="text-sm text-orange">
+                {error}{" "}
+                <a
+                  href="mailto:info@macombcode.com"
+                  className="font-bold underline underline-offset-2"
+                >
+                  info@macombcode.com
+                </a>
+              </p>
             )}
           </form>
         </Reveal>
