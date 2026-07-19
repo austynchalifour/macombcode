@@ -11,8 +11,6 @@ export type Inquiry = {
   createdAt: string;
 };
 
-type BlobAccess = "public" | "private";
-
 const BLOB_PATH = "inquiries.json";
 const DATA_DIR = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "inquiries.json");
@@ -21,24 +19,29 @@ function isVercelRuntime() {
   return process.env.VERCEL === "1";
 }
 
+function getBlobStoreId() {
+  return (
+    process.env.BLOB_STORE_ID?.trim() ||
+    process.env.ADMIN_PASSWORD_STORE_ID?.trim() ||
+    ""
+  );
+}
+
 /** Blob is available via read-write token and/or OIDC store id on Vercel. */
 function hasBlobCredentials() {
-  return Boolean(
-    process.env.BLOB_READ_WRITE_TOKEN?.trim() ||
-      process.env.BLOB_STORE_ID?.trim(),
-  );
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim() || getBlobStoreId());
 }
 
 function shouldUseBlob() {
   return hasBlobCredentials() || isVercelRuntime();
 }
 
-function configuredBlobAccess(): BlobAccess {
-  return process.env.BLOB_ACCESS === "private" ? "private" : "public";
-}
-
-function alternateAccess(access: BlobAccess): BlobAccess {
-  return access === "public" ? "private" : "public";
+function blobOptions() {
+  const storeId = getBlobStoreId();
+  return {
+    access: "private" as const,
+    ...(storeId ? { storeId } : {}),
+  };
 }
 
 function sortNewest(inquiries: Inquiry[]) {
@@ -60,13 +63,13 @@ function parseInquiries(raw: string): Inquiry[] {
 
 function missingBlobError() {
   return new Error(
-    "Vercel Blob is not connected. In Vercel → Storage, create a Blob store, link it to this project, then redeploy.",
+    "Vercel Blob is not connected. Set BLOB_STORE_ID (or ADMIN_PASSWORD_STORE_ID) and redeploy.",
   );
 }
 
-async function readFromBlob(access: BlobAccess): Promise<Inquiry[]> {
+async function readFromBlob(): Promise<Inquiry[]> {
   const result = await get(BLOB_PATH, {
-    access,
+    ...blobOptions(),
     useCache: false,
   });
 
@@ -76,28 +79,13 @@ async function readFromBlob(access: BlobAccess): Promise<Inquiry[]> {
   return parseInquiries(raw);
 }
 
-async function writeToBlob(inquiries: Inquiry[], access: BlobAccess) {
+async function writeToBlob(inquiries: Inquiry[]) {
   await put(BLOB_PATH, `${JSON.stringify(inquiries, null, 2)}\n`, {
-    access,
+    ...blobOptions(),
     contentType: "application/json",
     addRandomSuffix: false,
     allowOverwrite: true,
   });
-}
-
-async function withBlobAccessFallback<T>(
-  operation: (access: BlobAccess) => Promise<T>,
-): Promise<T> {
-  const primary = configuredBlobAccess();
-  try {
-    return await operation(primary);
-  } catch (primaryError) {
-    try {
-      return await operation(alternateAccess(primary));
-    } catch {
-      throw primaryError;
-    }
-  }
 }
 
 async function ensureLocalStore() {
@@ -130,7 +118,7 @@ export async function readInquiries(): Promise<Inquiry[]> {
   }
 
   try {
-    return await withBlobAccessFallback(readFromBlob);
+    return await readFromBlob();
   } catch (error) {
     if (!isVercelRuntime()) {
       return readFromFile();
@@ -164,7 +152,7 @@ export async function addInquiry(input: {
   }
 
   try {
-    await withBlobAccessFallback((access) => writeToBlob(inquiries, access));
+    await writeToBlob(inquiries);
     return inquiry;
   } catch (error) {
     if (!isVercelRuntime()) {
