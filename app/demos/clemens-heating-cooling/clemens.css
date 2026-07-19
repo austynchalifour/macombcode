@@ -1,0 +1,225 @@
+.chc-root {
+  --chc-navy: #0c1e36;
+  --chc-navy-mid: #143052;
+  --chc-navy-soft: #1c3d66;
+  --chc-orange: #f05a00;
+  --chc-orange-hot: #ff6a12;
+  --chc-steel: #e8edf3;
+  --chc-steel-soft: #f4f7fa;
+  --chc-mist: #b7c3d1;
+  --chc-ink: #0c1e36;
+  --chc-muted: #5a6b7d;
+
+  color: var(--chc-ink);
+  background: var(--chc-steel-soft);
+  font-family: var(--font-chc-body), "Segoe UI", sans-serif;
+}
+
+.chc-root ::selection {
+  background: color-mix(in srgb, var(--chc-orange) 40%, transparent);
+  color: var(--chc-navy);
+}
+
+.chc-display {
+  font-family: var(--font-chc-display), "Arial Narrow", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+}
+
+.chc-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.1;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+@keyframes chc-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chc-kenburns {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.chc-rise {
+  animation: chc-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.chc-rise-1 {
+  animation-delay: 0.1s;
+}
+
+.chc-rise-2 {
+  animation-delay: 0.2s;
+}
+
+.chc-rise-3 {
+  animation-delay: 0.3s;
+}
+
+.chc-hero-image {
+  animation: chc-kenburns 14s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.chc-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chc-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chc-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--chc-orange);
+  color: #fff;
+  font-family: var(--font-chc-display), sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.5rem;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.chc-cta:hover {
+  background: var(--chc-orange-hot);
+  transform: translateY(-1px);
+}
+
+.chc-cta:disabled {
+  opacity: 0.65;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.chc-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-chc-display), sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 0.25rem;
+  border-bottom: 2px solid color-mix(in srgb, #fff 55%, transparent);
+  transition: border-color 0.2s ease;
+}
+
+.chc-cta-ghost:hover {
+  border-color: var(--chc-orange);
+}
+
+.chc-field {
+  width: 100%;
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--chc-navy) 18%, transparent);
+  border-radius: 0;
+  color: var(--chc-ink);
+  font: inherit;
+  padding: 0.85rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chc-field:focus {
+  border-color: var(--chc-orange);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--chc-orange) 22%, transparent);
+}
+
+.chc-field::placeholder {
+  color: var(--chc-muted);
+}
+
+.chc-nav-link {
+  color: #fff;
+  font-family: var(--font-chc-display), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.chc-nav-link:hover {
+  color: var(--chc-orange);
+}
+
+.chc-demo-banner {
+  position: relative;
+  z-index: 30;
+  background: var(--chc-navy);
+  color: var(--chc-steel);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.chc-demo-banner a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.chc-demo-banner-link {
+  border-bottom: 1px solid var(--chc-orange);
+  padding-bottom: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.chc-demo-banner-link:hover {
+  color: #fff;
+  border-color: #fff;
+}
+
+.chc-demo-banner-back {
+  color: color-mix(in srgb, var(--chc-steel) 80%, transparent);
+  transition: color 0.2s ease;
+}
+
+.chc-demo-banner-back:hover {
+  color: #fff;
+}
+
+.chc-zip-panel {
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--chc-navy) 12%, transparent);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--chc-navy) 10%, transparent);
+}
+
+.chc-service-row {
+  border-top: 1px solid color-mix(in srgb, var(--chc-navy) 10%, transparent);
+}
+
+.chc-status-ok {
+  background: color-mix(in srgb, #1f8a4c 12%, #fff);
+  border-left: 4px solid #1f8a4c;
+}
+
+.chc-status-no {
+  background: color-mix(in srgb, var(--chc-orange) 10%, #fff);
+  border-left: 4px solid var(--chc-orange);
+}

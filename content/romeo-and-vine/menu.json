@@ -1,0 +1,136 @@
+{
+  "restaurant": {
+    "name": "Romeo & Vine",
+    "tagline": "Family tables, Italian plates, and a cellar worth lingering over.",
+    "location": "Downtown Romeo, Michigan",
+    "address": "124 South Main Street, Romeo, MI 48065",
+    "phone": "(586) 555-0142",
+    "hours": {
+      "tueSat": "Tue–Sat 5–10pm",
+      "sun": "Sun 4–9pm",
+      "closed": "Closed Mondays"
+    }
+  },
+  "updatedAt": "2026-07-19T18:00:00.000Z",
+  "dailySpecials": [
+    {
+      "id": "spec-sunday-osso",
+      "label": "Tonight's special",
+      "name": "Osso Buco al Limone",
+      "description": "Slow-braised veal shank, saffron risotto, gremolata, and a pour of Barbera from the cellar.",
+      "price": 38,
+      "available": true
+    },
+    {
+      "id": "spec-wine-flight",
+      "label": "Wine bar pick",
+      "name": "Northern Italy Flight",
+      "description": "Three two-ounce pours — Prosecco, Pinot Grigio delle Venezie, and Valpolicella Classico.",
+      "price": 18,
+      "available": true
+    }
+  ],
+  "sections": [
+    {
+      "id": "antipasti",
+      "title": "Antipasti",
+      "items": [
+        {
+          "id": "bruschetta",
+          "name": "Bruschetta al Pomodoro",
+          "description": "Grilled country bread, heirloom tomatoes, basil, aged balsamic.",
+          "price": 12,
+          "dietary": ["vegetarian"]
+        },
+        {
+          "id": "burrata",
+          "name": "Burrata & Prosciutto",
+          "description": "Creamy burrata, San Daniele prosciutto, grilled peach, pistachio.",
+          "price": 16,
+          "dietary": ["gluten-free"]
+        },
+        {
+          "id": "calamari",
+          "name": "Calamari Fritti",
+          "description": "Lightly fried, chili aioli, lemon, parsley.",
+          "price": 15,
+          "dietary": []
+        }
+      ]
+    },
+    {
+      "id": "pasta",
+      "title": "Pasta",
+      "items": [
+        {
+          "id": "cacio",
+          "name": "Cacio e Pepe",
+          "description": "Handmade tonnarelli, Pecorino Romano, cracked Tellicherry pepper.",
+          "price": 22,
+          "dietary": ["vegetarian"]
+        },
+        {
+          "id": "ragu",
+          "name": "Pappardelle al Ragù",
+          "description": "Wide ribbons, slow beef & pork ragù, Parmigiano Reggiano.",
+          "price": 26,
+          "dietary": []
+        },
+        {
+          "id": "lobster",
+          "name": "Linguine allo Scoglio",
+          "description": "Mussels, clams, shrimp, garlic, white wine, chili flake.",
+          "price": 32,
+          "dietary": []
+        }
+      ]
+    },
+    {
+      "id": "secondi",
+      "title": "Secondi",
+      "items": [
+        {
+          "id": "chicken",
+          "name": "Pollo al Mattone",
+          "description": "Brick-pressed half chicken, rosemary potatoes, salsa verde.",
+          "price": 28,
+          "dietary": ["gluten-free"]
+        },
+        {
+          "id": "salmon",
+          "name": "Salmone al Forno",
+          "description": "Roasted Atlantic salmon, fennel, citrus, olive oil.",
+          "price": 30,
+          "dietary": ["gluten-free"]
+        },
+        {
+          "id": "steak",
+          "name": "Bistecca Fiorentina",
+          "description": "Grilled ribeye for two, arugula, lemon, sea salt. Market cut.",
+          "price": 68,
+          "dietary": ["gluten-free"]
+        }
+      ]
+    },
+    {
+      "id": "dolci",
+      "title": "Dolci",
+      "items": [
+        {
+          "id": "tiramisu",
+          "name": "Tiramisù della Casa",
+          "description": "Espresso-soaked ladyfingers, mascarpone, cocoa.",
+          "price": 12,
+          "dietary": ["vegetarian"]
+        },
+        {
+          "id": "panna",
+          "name": "Panna Cotta",
+          "description": "Vanilla bean, macerated berries, pistachio crumb.",
+          "price": 11,
+          "dietary": ["gluten-free", "vegetarian"]
+        }
+      ]
+    }
+  ]
+}

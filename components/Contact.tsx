@@ -25,28 +25,28 @@ export default function Contact() {
 
   return (
     <section id="contact" className="border-t border-mist bg-paper-warm">
-      <div className="mx-auto grid max-w-7xl gap-14 px-5 py-20 md:grid-cols-2 md:gap-20 md:px-10 md:py-28">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 md:grid-cols-2 md:gap-14 md:px-10 md:py-16">
         <Reveal>
           <p className="font-display text-xs font-bold uppercase tracking-[0.22em] text-orange">
             Contact
           </p>
-          <h2 className="mt-4 font-display text-4xl font-extrabold leading-[1.05] tracking-[-0.03em] text-navy md:text-5xl">
+          <h2 className="mt-3 font-display text-4xl font-extrabold leading-[1.05] tracking-[-0.03em] text-navy md:text-5xl">
             Tell us what you need built.
           </h2>
-          <p className="mt-5 max-w-md text-xl leading-relaxed text-ink-muted italic">
+          <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-muted italic md:text-xl">
             Share a few details and we&apos;ll follow up on scope, timeline, and
             next steps.
           </p>
           <a
             href="mailto:info@macombcode.com"
-            className="mt-8 inline-block font-display text-lg font-bold text-navy transition-colors hover:text-orange"
+            className="mt-5 inline-block font-display text-lg font-bold text-navy transition-colors hover:text-orange"
           >
             info@macombcode.com
           </a>
         </Reveal>
 
         <Reveal>
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <label className="block">
               <span className="font-display text-xs font-bold uppercase tracking-[0.16em] text-navy/55">
                 Name

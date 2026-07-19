@@ -26,6 +26,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    {
+      url: `${siteUrl}/demos/romeo-and-vine`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
+    {
+      url: `${siteUrl}/demos/clemens-heating-cooling`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
+    {
+      url: `${siteUrl}/demos/harbor-point-dental`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
+    {
+      url: `${siteUrl}/demos/northside-supply`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    },
     ...cityEntries,
   ];
 }
