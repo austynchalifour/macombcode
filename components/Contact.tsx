@@ -20,7 +20,7 @@ export default function Contact() {
     );
 
     setStatus("ready");
-    window.location.href = `mailto:hello@macombcode.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:info@macombcode.com?subject=${subject}&body=${body}`;
   }
 
   return (
@@ -38,10 +38,10 @@ export default function Contact() {
             next steps.
           </p>
           <a
-            href="mailto:hello@macombcode.com"
+            href="mailto:info@macombcode.com"
             className="mt-8 inline-block font-display text-lg font-bold text-navy transition-colors hover:text-orange"
           >
-            hello@macombcode.com
+            info@macombcode.com
           </a>
         </Reveal>
 
