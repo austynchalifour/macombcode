@@ -11,6 +11,18 @@ type Inquiry = {
   createdAt: string;
 };
 
+type AnalyzerLead = {
+  id: string;
+  email: string;
+  url: string;
+  focusTopic: string | null;
+  overallScore: number | null;
+  createdAt: string;
+  contacted: boolean;
+  scanStatus: "ok" | "failed";
+  reportSlug: string | null;
+};
+
 type SessionState = {
   loading: boolean;
   authenticated: boolean;
@@ -38,8 +50,10 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [leads, setLeads] = useState<AnalyzerLead[]>([]);
   const [listError, setListError] = useState("");
   const [loadingList, setLoadingList] = useState(false);
+  const [updatingLeadId, setUpdatingLeadId] = useState<string | null>(null);
 
   const loadSession = useCallback(async () => {
     try {
@@ -60,25 +74,46 @@ export default function AdminPage() {
     }
   }, []);
 
-  const loadInquiries = useCallback(async () => {
+  const loadLists = useCallback(async () => {
     setLoadingList(true);
     setListError("");
     try {
-      const response = await fetch("/api/admin/inquiries");
-      const data = (await response.json()) as {
+      const [inquiriesRes, leadsRes] = await Promise.all([
+        fetch("/api/admin/inquiries"),
+        fetch("/api/admin/leads"),
+      ]);
+      const inquiriesData = (await inquiriesRes.json()) as {
         ok?: boolean;
         inquiries?: Inquiry[];
         error?: string;
       };
-      if (!response.ok || !data.ok) {
-        setListError(data.error || "Could not load inquiries.");
+      const leadsData = (await leadsRes.json()) as {
+        ok?: boolean;
+        leads?: AnalyzerLead[];
+        error?: string;
+      };
+
+      if (!inquiriesRes.ok || !inquiriesData.ok) {
+        setListError(inquiriesData.error || "Could not load inquiries.");
         setInquiries([]);
-        return;
+      } else {
+        setInquiries(inquiriesData.inquiries ?? []);
       }
-      setInquiries(data.inquiries ?? []);
+
+      if (!leadsRes.ok || !leadsData.ok) {
+        setListError((prev) =>
+          prev
+            ? prev
+            : leadsData.error || "Could not load analyzer leads.",
+        );
+        setLeads([]);
+      } else {
+        setLeads(leadsData.leads ?? []);
+      }
     } catch {
-      setListError("Could not load inquiries.");
+      setListError("Could not load admin data.");
       setInquiries([]);
+      setLeads([]);
     } finally {
       setLoadingList(false);
     }
@@ -87,9 +122,9 @@ export default function AdminPage() {
   useEffect(() => {
     void (async () => {
       const ok = await loadSession();
-      if (ok) await loadInquiries();
+      if (ok) await loadLists();
     })();
-  }, [loadSession, loadInquiries]);
+  }, [loadSession, loadLists]);
 
   async function handleLogin(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -111,7 +146,7 @@ export default function AdminPage() {
 
       setPassword("");
       setSession({ loading: false, authenticated: true, configured: true });
-      await loadInquiries();
+      await loadLists();
     } catch {
       setLoginError("Login failed.");
     } finally {
@@ -122,7 +157,35 @@ export default function AdminPage() {
   async function handleLogout() {
     await fetch("/api/admin/logout", { method: "POST" });
     setInquiries([]);
+    setLeads([]);
     setSession({ loading: false, authenticated: false, configured: true });
+  }
+
+  async function toggleLeadContacted(lead: AnalyzerLead) {
+    setUpdatingLeadId(lead.id);
+    try {
+      const response = await fetch("/api/admin/leads", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: lead.id, contacted: !lead.contacted }),
+      });
+      const data = (await response.json()) as {
+        ok?: boolean;
+        lead?: AnalyzerLead;
+        error?: string;
+      };
+      if (!response.ok || !data.ok || !data.lead) {
+        setListError(data.error || "Could not update lead.");
+        return;
+      }
+      setLeads((prev) =>
+        prev.map((item) => (item.id === data.lead!.id ? data.lead! : item)),
+      );
+    } catch {
+      setListError("Could not update lead.");
+    } finally {
+      setUpdatingLeadId(null);
+    }
   }
 
   return (
@@ -134,7 +197,7 @@ export default function AdminPage() {
               Admin
             </p>
             <h1 className="mt-3 font-display text-4xl font-extrabold tracking-[-0.03em] text-navy">
-              Inquiries
+              Leads
             </h1>
           </div>
           <Link
@@ -186,12 +249,12 @@ export default function AdminPage() {
               <p className="text-sm text-ink-muted">
                 {loadingList
                   ? "Refreshing…"
-                  : `${inquiries.length} submission${inquiries.length === 1 ? "" : "s"}`}
+                  : `${inquiries.length} contact · ${leads.length} analyzer`}
               </p>
               <div className="flex items-center gap-4">
                 <button
                   type="button"
-                  onClick={() => void loadInquiries()}
+                  onClick={() => void loadLists()}
                   className="font-display text-sm font-semibold text-navy/70 transition-colors hover:text-orange"
                 >
                   Refresh
@@ -210,39 +273,128 @@ export default function AdminPage() {
               <p className="mt-6 text-sm text-orange">{listError}</p>
             ) : null}
 
-            {!loadingList && inquiries.length === 0 && !listError ? (
-              <p className="mt-8 text-ink-muted italic">
-                No inquiries yet. Submissions from the contact form will show up
-                here.
+            <section className="mt-10">
+              <p className="font-display text-xs font-bold uppercase tracking-[0.22em] text-orange">
+                Analyzer leads
               </p>
-            ) : null}
+              <h2 className="mt-2 font-display text-2xl font-extrabold text-navy">
+                Website analyzer
+              </h2>
 
-            <ul className="mt-6 divide-y divide-mist">
-              {inquiries.map((inquiry) => (
-                <li key={inquiry.id} className="py-6">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                    <h2 className="font-display text-xl font-extrabold text-navy">
-                      {inquiry.name}
-                    </h2>
-                    <time
-                      dateTime={inquiry.createdAt}
-                      className="text-sm text-ink-muted"
+              {!loadingList && leads.length === 0 && !listError ? (
+                <p className="mt-6 text-ink-muted italic">
+                  No analyzer leads yet. Unlocks from /analyze will show up here.
+                </p>
+              ) : null}
+
+              <ul className="mt-6 divide-y divide-mist">
+                {leads.map((lead) => (
+                  <li key={lead.id} className="py-6">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                      <a
+                        href={`mailto:${lead.email}`}
+                        className="font-display text-xl font-extrabold text-navy transition-colors hover:text-orange"
+                      >
+                        {lead.email}
+                      </a>
+                      <time
+                        dateTime={lead.createdAt}
+                        className="text-sm text-ink-muted"
+                      >
+                        {formatDate(lead.createdAt)}
+                      </time>
+                    </div>
+                    <p className="mt-2 text-sm text-ink-muted">
+                      <a
+                        href={lead.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors hover:text-orange"
+                      >
+                        {lead.url}
+                      </a>
+                    </p>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-muted">
+                      <span>
+                        Score:{" "}
+                        {lead.overallScore === null
+                          ? "n/a"
+                          : lead.overallScore}
+                      </span>
+                      <span>
+                        Scan: {lead.scanStatus === "ok" ? "ok" : "failed"}
+                      </span>
+                      {lead.focusTopic ? (
+                        <span>Topic: {lead.focusTopic}</span>
+                      ) : null}
+                      {lead.reportSlug ? (
+                        <Link
+                          href={`/analyze/${lead.reportSlug}`}
+                          className="font-medium text-navy transition-colors hover:text-orange"
+                        >
+                          Open report
+                        </Link>
+                      ) : null}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => void toggleLeadContacted(lead)}
+                      disabled={updatingLeadId === lead.id}
+                      className="mt-3 font-display text-sm font-semibold text-navy/70 transition-colors hover:text-orange disabled:opacity-60"
                     >
-                      {formatDate(inquiry.createdAt)}
-                    </time>
-                  </div>
-                  <a
-                    href={`mailto:${inquiry.email}`}
-                    className="mt-1 inline-block text-sm font-medium text-navy transition-colors hover:text-orange"
-                  >
-                    {inquiry.email}
-                  </a>
-                  <p className="mt-3 whitespace-pre-wrap leading-relaxed text-ink-muted">
-                    {inquiry.message}
-                  </p>
-                </li>
-              ))}
-            </ul>
+                      {updatingLeadId === lead.id
+                        ? "Updating…"
+                        : lead.contacted
+                          ? "Marked contacted · undo"
+                          : "Mark contacted"}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="mt-14 border-t border-mist pt-10">
+              <p className="font-display text-xs font-bold uppercase tracking-[0.22em] text-orange">
+                Contact inquiries
+              </p>
+              <h2 className="mt-2 font-display text-2xl font-extrabold text-navy">
+                Contact form
+              </h2>
+
+              {!loadingList && inquiries.length === 0 && !listError ? (
+                <p className="mt-6 text-ink-muted italic">
+                  No inquiries yet. Submissions from the contact form will show
+                  up here.
+                </p>
+              ) : null}
+
+              <ul className="mt-6 divide-y divide-mist">
+                {inquiries.map((inquiry) => (
+                  <li key={inquiry.id} className="py-6">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                      <h3 className="font-display text-xl font-extrabold text-navy">
+                        {inquiry.name}
+                      </h3>
+                      <time
+                        dateTime={inquiry.createdAt}
+                        className="text-sm text-ink-muted"
+                      >
+                        {formatDate(inquiry.createdAt)}
+                      </time>
+                    </div>
+                    <a
+                      href={`mailto:${inquiry.email}`}
+                      className="mt-1 inline-block text-sm font-medium text-navy transition-colors hover:text-orange"
+                    >
+                      {inquiry.email}
+                    </a>
+                    <p className="mt-3 whitespace-pre-wrap leading-relaxed text-ink-muted">
+                      {inquiry.message}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </section>
           </div>
         )}
       </div>

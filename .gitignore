@@ -34,6 +34,11 @@ yarn-error.log*
 .env*
 !.env.example
 
+# Local analyzer/contact lead data (Blob in production)
+/data/leads.json
+/data/reports/
+/possible leads/
+
 # vercel
 .vercel
 
