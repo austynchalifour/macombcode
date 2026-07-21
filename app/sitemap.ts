@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { cities } from "@/data/cities";
+import { services } from "@/data/services";
 
 const siteUrl = "https://macombcode.com";
 
@@ -13,6 +14,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const serviceEntries = services.map((service) => ({
+    url: `${siteUrl}/services/${service.slug}`,
+    lastModified,
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  }));
+
   return [
     {
       url: siteUrl,
@@ -24,6 +32,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}/cities`,
       lastModified,
       changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${siteUrl}/services`,
+      lastModified,
+      changeFrequency: "monthly" as const,
       priority: 0.9,
     },
     {
@@ -50,6 +64,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     },
+    ...serviceEntries,
     ...cityEntries,
   ];
 }

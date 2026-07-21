@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Reveal from "./Reveal";
 
 type Status = "idle" | "sending" | "success" | "error";
@@ -8,6 +8,15 @@ type Status = "idle" | "sending" | "success" | "error";
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const plan = new URLSearchParams(window.location.search).get("plan");
+    if (!plan) return;
+    setMessage(
+      `I'm interested in the ${plan} retainer. Here's a bit about what I need:\n\n`,
+    );
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -42,6 +51,7 @@ export default function Contact() {
       }
 
       setStatus("success");
+      setMessage("");
       form.reset();
     } catch {
       setStatus("error");
@@ -111,6 +121,8 @@ export default function Contact() {
                 name="message"
                 required
                 rows={4}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 className="field mt-2 resize-y"
                 placeholder="What are you looking to build?"
                 disabled={status === "sending"}

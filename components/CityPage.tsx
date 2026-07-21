@@ -6,16 +6,19 @@ import { cities, typeLabel, type City } from "@/data/cities";
 const services = [
   {
     title: "Websites",
+    slug: "websites",
     copy: (name: string) =>
       `Marketing sites built for ${name} customers — clear offers, fast load times, and mobile-first design that converts.`,
   },
   {
     title: "Software",
+    slug: "software",
     copy: (name: string) =>
       `Custom tools for ${name} teams: scheduling, intake, dashboards, and workflows that cut busywork.`,
   },
   {
     title: "Ongoing support",
+    slug: "support",
     copy: () =>
       "Updates, improvements, and a local partner who can fix issues before they cost you leads.",
   },
@@ -109,11 +112,22 @@ export default function CityPage({ city }: { city: City }) {
                 </span>
                 <div>
                   <h3 className="font-display text-2xl font-bold md:text-3xl">
-                    {service.title}
+                    <Link
+                      href={`/services/${service.slug}`}
+                      className="transition-colors hover:text-orange"
+                    >
+                      {service.title}
+                    </Link>
                   </h3>
                   <p className="mt-3 max-w-2xl text-lg leading-relaxed text-paper/75">
                     {service.copy(city.name)}
                   </p>
+                  <Link
+                    href={`/services/${service.slug}`}
+                    className="mt-4 inline-block font-display text-sm font-semibold text-orange transition-colors hover:text-paper"
+                  >
+                    Learn more →
+                  </Link>
                 </div>
               </li>
             ))}
