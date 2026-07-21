@@ -7,6 +7,9 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/api/admin"],
     },
-    sitemap: "https://macombcode.com/sitemap.xml",
+    sitemap: [
+      "https://macombcode.com/sitemap.xml",
+      "https://macombcode.com/sitemap-cities.xml",
+    ],
   };
 }

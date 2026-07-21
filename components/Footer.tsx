@@ -68,6 +68,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/site-map"
+                  className="transition-colors hover:text-navy"
+                >
+                  Site map
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/book"
                   className="transition-colors hover:text-navy"
                 >
