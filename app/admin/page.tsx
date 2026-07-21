@@ -9,6 +9,7 @@ type Inquiry = {
   email: string;
   message: string;
   createdAt: string;
+  referralSlug?: string | null;
 };
 
 type AnalyzerLead = {
@@ -21,6 +22,30 @@ type AnalyzerLead = {
   contacted: boolean;
   scanStatus: "ok" | "failed";
   reportSlug: string | null;
+  referralSlug?: string | null;
+};
+
+type ReferrerStat = {
+  id: string;
+  name: string;
+  email: string;
+  slug: string;
+  createdAt: string;
+  attributedLeads: number;
+  conversions: number;
+  owed: number;
+  paid: number;
+};
+
+type Conversion = {
+  id: string;
+  inquiryId: string | null;
+  leadId: string | null;
+  referralSlug: string;
+  invoiceAmount: number;
+  commissionAmount: number;
+  status: "owed" | "paid";
+  createdAt: string;
 };
 
 type SessionState = {
@@ -40,6 +65,14 @@ function formatDate(value: string) {
   }
 }
 
+function formatMoney(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
 export default function AdminPage() {
   const [session, setSession] = useState<SessionState>({
     loading: true,
@@ -51,9 +84,18 @@ export default function AdminPage() {
   const [loggingIn, setLoggingIn] = useState(false);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [leads, setLeads] = useState<AnalyzerLead[]>([]);
+  const [referrers, setReferrers] = useState<ReferrerStat[]>([]);
+  const [conversions, setConversions] = useState<Conversion[]>([]);
   const [listError, setListError] = useState("");
   const [loadingList, setLoadingList] = useState(false);
   const [updatingLeadId, setUpdatingLeadId] = useState<string | null>(null);
+  const [purchaseAmounts, setPurchaseAmounts] = useState<Record<string, string>>(
+    {},
+  );
+  const [savingPurchaseId, setSavingPurchaseId] = useState<string | null>(null);
+  const [updatingConversionId, setUpdatingConversionId] = useState<string | null>(
+    null,
+  );
 
   const loadSession = useCallback(async () => {
     try {
@@ -78,9 +120,10 @@ export default function AdminPage() {
     setLoadingList(true);
     setListError("");
     try {
-      const [inquiriesRes, leadsRes] = await Promise.all([
+      const [inquiriesRes, leadsRes, referralsRes] = await Promise.all([
         fetch("/api/admin/inquiries"),
         fetch("/api/admin/leads"),
+        fetch("/api/admin/referrals"),
       ]);
       const inquiriesData = (await inquiriesRes.json()) as {
         ok?: boolean;
@@ -90,6 +133,12 @@ export default function AdminPage() {
       const leadsData = (await leadsRes.json()) as {
         ok?: boolean;
         leads?: AnalyzerLead[];
+        error?: string;
+      };
+      const referralsData = (await referralsRes.json()) as {
+        ok?: boolean;
+        referrers?: ReferrerStat[];
+        conversions?: Conversion[];
         error?: string;
       };
 
@@ -102,18 +151,29 @@ export default function AdminPage() {
 
       if (!leadsRes.ok || !leadsData.ok) {
         setListError((prev) =>
-          prev
-            ? prev
-            : leadsData.error || "Could not load analyzer leads.",
+          prev ? prev : leadsData.error || "Could not load analyzer leads.",
         );
         setLeads([]);
       } else {
         setLeads(leadsData.leads ?? []);
       }
+
+      if (!referralsRes.ok || !referralsData.ok) {
+        setListError((prev) =>
+          prev ? prev : referralsData.error || "Could not load referrals.",
+        );
+        setReferrers([]);
+        setConversions([]);
+      } else {
+        setReferrers(referralsData.referrers ?? []);
+        setConversions(referralsData.conversions ?? []);
+      }
     } catch {
       setListError("Could not load admin data.");
       setInquiries([]);
       setLeads([]);
+      setReferrers([]);
+      setConversions([]);
     } finally {
       setLoadingList(false);
     }
@@ -158,6 +218,8 @@ export default function AdminPage() {
     await fetch("/api/admin/logout", { method: "POST" });
     setInquiries([]);
     setLeads([]);
+    setReferrers([]);
+    setConversions([]);
     setSession({ loading: false, authenticated: false, configured: true });
   }
 
@@ -186,6 +248,144 @@ export default function AdminPage() {
     } finally {
       setUpdatingLeadId(null);
     }
+  }
+
+  function conversionFor(inquiryId?: string, leadId?: string) {
+    return conversions.find(
+      (item) =>
+        (inquiryId && item.inquiryId === inquiryId) ||
+        (leadId && item.leadId === leadId),
+    );
+  }
+
+  async function markPurchased(input: {
+    key: string;
+    inquiryId?: string;
+    leadId?: string;
+    referralSlug: string;
+  }) {
+    const amount = Number(purchaseAmounts[input.key]);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setListError("Enter a valid first invoice amount.");
+      return;
+    }
+
+    setSavingPurchaseId(input.key);
+    try {
+      const response = await fetch("/api/admin/referrals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          inquiryId: input.inquiryId,
+          leadId: input.leadId,
+          referralSlug: input.referralSlug,
+          invoiceAmount: amount,
+        }),
+      });
+      const data = (await response.json()) as {
+        ok?: boolean;
+        error?: string;
+      };
+      if (!response.ok || !data.ok) {
+        setListError(data.error || "Could not mark purchased.");
+        return;
+      }
+      await loadLists();
+    } catch {
+      setListError("Could not mark purchased.");
+    } finally {
+      setSavingPurchaseId(null);
+    }
+  }
+
+  async function toggleConversionPaid(conversion: Conversion) {
+    setUpdatingConversionId(conversion.id);
+    try {
+      const response = await fetch("/api/admin/referrals", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: conversion.id,
+          paid: conversion.status !== "paid",
+        }),
+      });
+      const data = (await response.json()) as {
+        ok?: boolean;
+        error?: string;
+      };
+      if (!response.ok || !data.ok) {
+        setListError(data.error || "Could not update commission.");
+        return;
+      }
+      await loadLists();
+    } catch {
+      setListError("Could not update commission.");
+    } finally {
+      setUpdatingConversionId(null);
+    }
+  }
+
+  function PurchaseControls({
+    itemKey,
+    referralSlug,
+    inquiryId,
+    leadId,
+  }: {
+    itemKey: string;
+    referralSlug: string;
+    inquiryId?: string;
+    leadId?: string;
+  }) {
+    const existing = conversionFor(inquiryId, leadId);
+    if (existing) {
+      return (
+        <p className="mt-3 text-sm text-ink-muted">
+          Purchased · invoice {formatMoney(existing.invoiceAmount)} · commission{" "}
+          {formatMoney(existing.commissionAmount)} ({existing.status})
+        </p>
+      );
+    }
+
+    return (
+      <div className="mt-3 flex flex-wrap items-end gap-3">
+        <label className="block">
+          <span className="font-display text-[10px] font-bold uppercase tracking-[0.14em] text-navy/50">
+            First invoice $
+          </span>
+          <input
+            type="number"
+            min="1"
+            step="0.01"
+            value={purchaseAmounts[itemKey] ?? ""}
+            onChange={(e) =>
+              setPurchaseAmounts((prev) => ({
+                ...prev,
+                [itemKey]: e.target.value,
+              }))
+            }
+            className="field mt-1 !py-2 w-32"
+            placeholder="299"
+          />
+        </label>
+        <button
+          type="button"
+          onClick={() =>
+            void markPurchased({
+              key: itemKey,
+              inquiryId,
+              leadId,
+              referralSlug,
+            })
+          }
+          disabled={savingPurchaseId === itemKey}
+          className="font-display text-sm font-semibold text-navy/70 transition-colors hover:text-orange disabled:opacity-60"
+        >
+          {savingPurchaseId === itemKey
+            ? "Saving…"
+            : "Mark purchased (35%)"}
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -249,7 +449,7 @@ export default function AdminPage() {
               <p className="text-sm text-ink-muted">
                 {loadingList
                   ? "Refreshing…"
-                  : `${inquiries.length} contact · ${leads.length} analyzer`}
+                  : `${inquiries.length} contact · ${leads.length} analyzer · ${referrers.length} referrers`}
               </p>
               <div className="flex items-center gap-4">
                 <button
@@ -274,6 +474,97 @@ export default function AdminPage() {
             ) : null}
 
             <section className="mt-10">
+              <p className="font-display text-xs font-bold uppercase tracking-[0.22em] text-orange">
+                Referral partners
+              </p>
+              <h2 className="mt-2 font-display text-2xl font-extrabold text-navy">
+                Custom links
+              </h2>
+
+              {!loadingList && referrers.length === 0 && !listError ? (
+                <p className="mt-6 text-ink-muted italic">
+                  No referrers yet. Claims from /referral will show up here.
+                </p>
+              ) : null}
+
+              <ul className="mt-6 divide-y divide-mist">
+                {referrers.map((referrer) => (
+                  <li key={referrer.id} className="py-6">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                      <h3 className="font-display text-xl font-extrabold text-navy">
+                        {referrer.name}
+                      </h3>
+                      <time
+                        dateTime={referrer.createdAt}
+                        className="text-sm text-ink-muted"
+                      >
+                        {formatDate(referrer.createdAt)}
+                      </time>
+                    </div>
+                    <a
+                      href={`mailto:${referrer.email}`}
+                      className="mt-1 inline-block text-sm font-medium text-navy transition-colors hover:text-orange"
+                    >
+                      {referrer.email}
+                    </a>
+                    <p className="mt-2 text-sm text-ink-muted">
+                      <Link
+                        href={`/r/${referrer.slug}`}
+                        className="font-medium text-navy transition-colors hover:text-orange"
+                      >
+                        /r/{referrer.slug}
+                      </Link>
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-muted">
+                      <span>Attributed: {referrer.attributedLeads}</span>
+                      <span>Purchases: {referrer.conversions}</span>
+                      <span>Owed: {formatMoney(referrer.owed)}</span>
+                      <span>Paid: {formatMoney(referrer.paid)}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {conversions.length > 0 ? (
+                <div className="mt-10">
+                  <p className="font-display text-xs font-bold uppercase tracking-[0.18em] text-orange">
+                    Commissions
+                  </p>
+                  <ul className="mt-4 divide-y divide-mist">
+                    {conversions.map((conversion) => (
+                      <li
+                        key={conversion.id}
+                        className="flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div className="text-sm text-ink-muted">
+                          <span className="font-medium text-navy">
+                            /r/{conversion.referralSlug}
+                          </span>
+                          {" · "}
+                          {formatMoney(conversion.commissionAmount)} of{" "}
+                          {formatMoney(conversion.invoiceAmount)} ·{" "}
+                          {conversion.status}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => void toggleConversionPaid(conversion)}
+                          disabled={updatingConversionId === conversion.id}
+                          className="font-display text-sm font-semibold text-navy/70 transition-colors hover:text-orange disabled:opacity-60"
+                        >
+                          {updatingConversionId === conversion.id
+                            ? "Updating…"
+                            : conversion.status === "paid"
+                              ? "Mark unpaid"
+                              : "Mark paid"}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </section>
+
+            <section className="mt-14 border-t border-mist pt-10">
               <p className="font-display text-xs font-bold uppercase tracking-[0.22em] text-orange">
                 Analyzer leads
               </p>
@@ -327,6 +618,11 @@ export default function AdminPage() {
                       {lead.focusTopic ? (
                         <span>Topic: {lead.focusTopic}</span>
                       ) : null}
+                      {lead.referralSlug ? (
+                        <span className="font-medium text-orange">
+                          Referral: /r/{lead.referralSlug}
+                        </span>
+                      ) : null}
                       {lead.reportSlug ? (
                         <Link
                           href={`/analyze/${lead.reportSlug}`}
@@ -348,6 +644,13 @@ export default function AdminPage() {
                           ? "Marked contacted · undo"
                           : "Mark contacted"}
                     </button>
+                    {lead.referralSlug ? (
+                      <PurchaseControls
+                        itemKey={`lead-${lead.id}`}
+                        referralSlug={lead.referralSlug}
+                        leadId={lead.id}
+                      />
+                    ) : null}
                   </li>
                 ))}
               </ul>
@@ -388,9 +691,21 @@ export default function AdminPage() {
                     >
                       {inquiry.email}
                     </a>
+                    {inquiry.referralSlug ? (
+                      <p className="mt-2 text-sm font-medium text-orange">
+                        Referral: /r/{inquiry.referralSlug}
+                      </p>
+                    ) : null}
                     <p className="mt-3 whitespace-pre-wrap leading-relaxed text-ink-muted">
                       {inquiry.message}
                     </p>
+                    {inquiry.referralSlug ? (
+                      <PurchaseControls
+                        itemKey={`inquiry-${inquiry.id}`}
+                        referralSlug={inquiry.referralSlug}
+                        inquiryId={inquiry.id}
+                      />
+                    ) : null}
                   </li>
                 ))}
               </ul>

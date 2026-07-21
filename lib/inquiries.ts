@@ -9,6 +9,7 @@ export type Inquiry = {
   email: string;
   message: string;
   createdAt: string;
+  referralSlug?: string | null;
 };
 
 const BLOB_PATH = "inquiries.json";
@@ -134,6 +135,7 @@ export async function addInquiry(input: {
   name: string;
   email: string;
   message: string;
+  referralSlug?: string | null;
 }): Promise<Inquiry> {
   const inquiries = await readInquiries();
   const inquiry: Inquiry = {
@@ -142,6 +144,7 @@ export async function addInquiry(input: {
     email: input.email,
     message: input.message,
     createdAt: new Date().toISOString(),
+    referralSlug: input.referralSlug?.trim() || null,
   };
 
   inquiries.unshift(inquiry);

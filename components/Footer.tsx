@@ -66,6 +66,14 @@ export default function Footer() {
                   Service areas
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/referral"
+                  className="transition-colors hover:text-navy"
+                >
+                  Referral program
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

@@ -37,6 +37,8 @@ yarn-error.log*
 # Local analyzer/contact lead data (Blob in production)
 /data/leads.json
 /data/reports/
+/data/referrers.json
+/data/referral-conversions.json
 /possible leads/
 
 # Local experiments

@@ -13,6 +13,7 @@ export type AnalyzerLead = {
   contacted: boolean;
   scanStatus: "ok" | "failed";
   reportSlug: string | null;
+  referralSlug?: string | null;
 };
 
 const LEADS_PATH = "data/leads.json";
@@ -33,6 +34,7 @@ export async function addLead(input: {
   result?: AnalyzeResult | null;
   scanStatus: "ok" | "failed";
   reportSlug?: string | null;
+  referralSlug?: string | null;
 }): Promise<AnalyzerLead> {
   const leads = await readLeads();
   const lead: AnalyzerLead = {
@@ -56,6 +58,7 @@ export async function addLead(input: {
     contacted: false,
     scanStatus: input.scanStatus,
     reportSlug: input.reportSlug ?? null,
+    referralSlug: input.referralSlug?.trim() || null,
   };
 
   leads.unshift(lead);

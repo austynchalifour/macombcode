@@ -41,6 +41,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${siteUrl}/referral`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    },
+    {
       url: `${siteUrl}/demos/romeo-and-vine`,
       lastModified,
       changeFrequency: "monthly" as const,

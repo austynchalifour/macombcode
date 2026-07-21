@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { addInquiry } from "@/lib/inquiries";
+import { REFERRAL_COOKIE, getReferrerBySlug } from "@/lib/referrals";
 
 type ContactBody = {
   name?: string;
@@ -48,8 +50,17 @@ export async function POST(request: Request) {
     );
   }
 
+  const cookieStore = await cookies();
+  const rawRef = cookieStore.get(REFERRAL_COOKIE)?.value ?? "";
+  const referrer = rawRef ? await getReferrerBySlug(rawRef) : null;
+
   try {
-    await addInquiry({ name, email, message });
+    await addInquiry({
+      name,
+      email,
+      message,
+      referralSlug: referrer?.slug ?? null,
+    });
   } catch (error) {
     console.error("Failed to store inquiry:", error);
     return NextResponse.json(

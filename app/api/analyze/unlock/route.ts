@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { addLead } from "@/lib/analyze/leads";
 import type { AnalyzeResult } from "@/lib/analyze/metrics";
 import { saveReport } from "@/lib/analyze/reports";
+import { REFERRAL_COOKIE, getReferrerBySlug } from "@/lib/referrals";
 
 type UnlockBody = {
   email?: string;
@@ -54,6 +56,10 @@ export async function POST(request: Request) {
     );
   }
 
+  const cookieStore = await cookies();
+  const rawRef = cookieStore.get(REFERRAL_COOKIE)?.value ?? "";
+  const referrer = rawRef ? await getReferrerBySlug(rawRef) : null;
+
   try {
     let reportSlug: string | null = null;
 
@@ -69,6 +75,7 @@ export async function POST(request: Request) {
       result: scanStatus === "ok" ? result : null,
       scanStatus,
       reportSlug,
+      referralSlug: referrer?.slug ?? null,
     });
 
     return NextResponse.json({
