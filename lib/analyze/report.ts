@@ -134,7 +134,7 @@ export function buildMarkdownReport(
     ...formatCategory("Freshness", result.freshness),
     "---",
     "",
-    "_Want help fixing these? Book a free 15-minute call at macombcode.com/#contact_",
+    "_Want help fixing these? Book a free 15-minute call at macombcode.com/book_",
     "",
     "_Report generated at macombcode.com/analyze_",
     "",

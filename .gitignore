@@ -39,6 +39,7 @@ yarn-error.log*
 /data/reports/
 /data/referrers.json
 /data/referral-conversions.json
+/data/bookings.json
 /possible leads/
 
 # Local experiments

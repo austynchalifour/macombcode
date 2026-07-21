@@ -47,6 +47,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: `${siteUrl}/book`,
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
+    },
+    {
       url: `${siteUrl}/demos/romeo-and-vine`,
       lastModified,
       changeFrequency: "monthly" as const,

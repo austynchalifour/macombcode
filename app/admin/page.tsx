@@ -48,6 +48,18 @@ type Conversion = {
   createdAt: string;
 };
 
+type Booking = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  preference: "phone" | "video";
+  note: string | null;
+  startsAt: string;
+  status: "scheduled" | "canceled";
+  referralSlug: string | null;
+};
+
 type SessionState = {
   loading: boolean;
   authenticated: boolean;
@@ -86,9 +98,13 @@ export default function AdminPage() {
   const [leads, setLeads] = useState<AnalyzerLead[]>([]);
   const [referrers, setReferrers] = useState<ReferrerStat[]>([]);
   const [conversions, setConversions] = useState<Conversion[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [listError, setListError] = useState("");
   const [loadingList, setLoadingList] = useState(false);
   const [updatingLeadId, setUpdatingLeadId] = useState<string | null>(null);
+  const [cancelingBookingId, setCancelingBookingId] = useState<string | null>(
+    null,
+  );
   const [purchaseAmounts, setPurchaseAmounts] = useState<Record<string, string>>(
     {},
   );
@@ -120,11 +136,13 @@ export default function AdminPage() {
     setLoadingList(true);
     setListError("");
     try {
-      const [inquiriesRes, leadsRes, referralsRes] = await Promise.all([
-        fetch("/api/admin/inquiries"),
-        fetch("/api/admin/leads"),
-        fetch("/api/admin/referrals"),
-      ]);
+      const [inquiriesRes, leadsRes, referralsRes, bookingsRes] =
+        await Promise.all([
+          fetch("/api/admin/inquiries"),
+          fetch("/api/admin/leads"),
+          fetch("/api/admin/referrals"),
+          fetch("/api/admin/bookings"),
+        ]);
       const inquiriesData = (await inquiriesRes.json()) as {
         ok?: boolean;
         inquiries?: Inquiry[];
@@ -139,6 +157,11 @@ export default function AdminPage() {
         ok?: boolean;
         referrers?: ReferrerStat[];
         conversions?: Conversion[];
+        error?: string;
+      };
+      const bookingsData = (await bookingsRes.json()) as {
+        ok?: boolean;
+        bookings?: Booking[];
         error?: string;
       };
 
@@ -168,12 +191,22 @@ export default function AdminPage() {
         setReferrers(referralsData.referrers ?? []);
         setConversions(referralsData.conversions ?? []);
       }
+
+      if (!bookingsRes.ok || !bookingsData.ok) {
+        setListError((prev) =>
+          prev ? prev : bookingsData.error || "Could not load bookings.",
+        );
+        setBookings([]);
+      } else {
+        setBookings(bookingsData.bookings ?? []);
+      }
     } catch {
       setListError("Could not load admin data.");
       setInquiries([]);
       setLeads([]);
       setReferrers([]);
       setConversions([]);
+      setBookings([]);
     } finally {
       setLoadingList(false);
     }
@@ -220,6 +253,7 @@ export default function AdminPage() {
     setLeads([]);
     setReferrers([]);
     setConversions([]);
+    setBookings([]);
     setSession({ loading: false, authenticated: false, configured: true });
   }
 
@@ -247,6 +281,30 @@ export default function AdminPage() {
       setListError("Could not update lead.");
     } finally {
       setUpdatingLeadId(null);
+    }
+  }
+
+  async function cancelScheduledBooking(booking: Booking) {
+    setCancelingBookingId(booking.id);
+    try {
+      const response = await fetch("/api/admin/bookings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: booking.id, status: "canceled" }),
+      });
+      const data = (await response.json()) as {
+        ok?: boolean;
+        error?: string;
+      };
+      if (!response.ok || !data.ok) {
+        setListError(data.error || "Could not cancel booking.");
+        return;
+      }
+      await loadLists();
+    } catch {
+      setListError("Could not cancel booking.");
+    } finally {
+      setCancelingBookingId(null);
     }
   }
 
@@ -449,7 +507,7 @@ export default function AdminPage() {
               <p className="text-sm text-ink-muted">
                 {loadingList
                   ? "Refreshing…"
-                  : `${inquiries.length} contact · ${leads.length} analyzer · ${referrers.length} referrers`}
+                  : `${inquiries.length} contact · ${leads.length} analyzer · ${bookings.length} bookings · ${referrers.length} referrers`}
               </p>
               <div className="flex items-center gap-4">
                 <button
@@ -474,6 +532,84 @@ export default function AdminPage() {
             ) : null}
 
             <section className="mt-10">
+              <p className="font-display text-xs font-bold uppercase tracking-[0.22em] text-orange">
+                Walkthrough bookings
+              </p>
+              <h2 className="mt-2 font-display text-2xl font-extrabold text-navy">
+                Call scheduler
+              </h2>
+
+              {!loadingList && bookings.length === 0 && !listError ? (
+                <p className="mt-6 text-ink-muted italic">
+                  No bookings yet. Submissions from /book will show up here.
+                </p>
+              ) : null}
+
+              <ul className="mt-6 divide-y divide-mist">
+                {bookings.map((booking) => (
+                  <li key={booking.id} className="py-6">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                      <h3 className="font-display text-xl font-extrabold text-navy">
+                        {booking.name}
+                      </h3>
+                      <span className="text-sm text-ink-muted">
+                        {formatDate(booking.startsAt)}
+                      </span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-muted">
+                      <a
+                        href={`mailto:${booking.email}`}
+                        className="font-medium text-navy transition-colors hover:text-orange"
+                      >
+                        {booking.email}
+                      </a>
+                      <a
+                        href={`tel:${booking.phone}`}
+                        className="transition-colors hover:text-orange"
+                      >
+                        {booking.phone}
+                      </a>
+                      <span>
+                        {booking.preference === "video" ? "Video" : "Phone"}
+                      </span>
+                      <span
+                        className={
+                          booking.status === "canceled"
+                            ? "text-orange"
+                            : "text-navy"
+                        }
+                      >
+                        {booking.status}
+                      </span>
+                      {booking.referralSlug ? (
+                        <span className="font-medium text-orange">
+                          Referral: /r/{booking.referralSlug}
+                        </span>
+                      ) : null}
+                    </div>
+                    {booking.note ? (
+                      <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-ink-muted">
+                        {booking.note}
+                      </p>
+                    ) : null}
+                    {booking.status === "scheduled" ? (
+                      <button
+                        type="button"
+                        onClick={() => void cancelScheduledBooking(booking)}
+                        disabled={cancelingBookingId === booking.id}
+                        className="mt-3 font-display text-sm font-semibold text-navy/70 transition-colors hover:text-orange disabled:opacity-60"
+                      >
+                        {cancelingBookingId === booking.id
+                          ? "Canceling…"
+                          : "Cancel booking"}
+                      </button>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="mt-14 border-t border-mist pt-10">
               <p className="font-display text-xs font-bold uppercase tracking-[0.22em] text-orange">
                 Referral partners
               </p>

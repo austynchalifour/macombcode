@@ -328,8 +328,8 @@ export function AnalyzeReportDocument({
   const focus = topic?.trim() || result.focusTopic?.trim() || "";
   const ctaLine =
     result.overallScore >= 75
-      ? "Solid foundation — book a free 15-minute call at macombcode.com/#contact to push it further."
-      : "Want these fixed? Book a free 15-minute call at macombcode.com/#contact";
+      ? "Solid foundation — book a free 15-minute call at macombcode.com/book to push it further."
+      : "Want these fixed? Book a free 15-minute call at macombcode.com/book";
 
   return (
     <Document
@@ -383,8 +383,8 @@ export function AnalyzeReportDocument({
           <View style={[styles.recItem, { marginTop: 10 }]} wrap={false}>
             <Text style={styles.recMeta}>Next step</Text>
             <Text style={styles.recTitle}>{ctaLine}</Text>
-            <Link src="https://macombcode.com/#contact" style={styles.recAction}>
-              macombcode.com/#contact
+            <Link src="https://macombcode.com/book" style={styles.recAction}>
+              macombcode.com/book
             </Link>
           </View>
         </View>

@@ -68,6 +68,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/book"
+                  className="transition-colors hover:text-navy"
+                >
+                  Book a call
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/referral"
                   className="transition-colors hover:text-navy"
                 >

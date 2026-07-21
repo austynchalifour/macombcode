@@ -93,7 +93,7 @@ export function AnalyzeCta({ overallScore }: { overallScore: number }) {
           ? "You’re ahead of most local sites. A short call can turn the remaining gaps into more calls and bookings."
           : "These are the kinds of issues that quietly cost local businesses leads every week. We can walk through a fix plan in 15 minutes — free, no pressure."}
       </p>
-      <Link href="/#contact" className="cta-primary mt-6 inline-flex text-base">
+      <Link href="/book" className="cta-primary mt-6 inline-flex text-base">
         Book a free 15-minute call
       </Link>
     </div>
@@ -250,7 +250,7 @@ export default function AnalyzeReportView({
         <p className="text-sm text-ink-muted italic">
           Want help fixing these?
         </p>
-        <Link href="/#contact" className="cta-secondary text-sm">
+        <Link href="/book" className="cta-secondary text-sm">
           Book a free call
         </Link>
       </div>
