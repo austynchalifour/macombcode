@@ -5,7 +5,12 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/api/admin", "/demos/dump-daddy"],
+      disallow: [
+        "/admin",
+        "/api/admin",
+        "/demos/dump-daddy",
+        "/demos/precision-paving",
+      ],
     },
     sitemap: [
       "https://macombcode.com/sitemap.xml",
