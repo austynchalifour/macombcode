@@ -50,11 +50,6 @@ export default function Nav() {
               {phoneDisplay}
             </a>
           </li>
-          <li>
-            <Link href="/#contact" className="cta-primary !px-4 !py-2.5 text-sm">
-              Start a project
-            </Link>
-          </li>
         </ul>
 
         <div className="flex items-center gap-3 md:hidden">
@@ -115,13 +110,6 @@ export default function Nav() {
               </a>
             </li>
           </ul>
-          <Link
-            href="/#contact"
-            className="cta-primary mt-6 inline-flex text-sm"
-            onClick={() => setOpen(false)}
-          >
-            Start a project
-          </Link>
         </div>
       )}
     </header>
