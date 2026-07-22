@@ -11,6 +11,9 @@ const links = [
   { href: "/#contact", label: "Contact" },
 ];
 
+const phoneDisplay = "586-368-2259";
+const phoneHref = "tel:+15863682259";
+
 export default function Nav() {
   const [open, setOpen] = useState(false);
 
@@ -40,35 +43,52 @@ export default function Nav() {
             </li>
           ))}
           <li>
+            <a
+              href={phoneHref}
+              className="font-display text-sm font-semibold text-navy/70 transition-colors hover:text-orange"
+            >
+              {phoneDisplay}
+            </a>
+          </li>
+          <li>
             <Link href="/#contact" className="cta-primary !px-4 !py-2.5 text-sm">
               Start a project
             </Link>
           </li>
         </ul>
 
-        <button
-          type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span
-            className={`block h-0.5 w-6 bg-navy transition-transform ${
-              open ? "translate-y-2 rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`block h-0.5 w-6 bg-navy transition-opacity ${
-              open ? "opacity-0" : ""
-            }`}
-          />
-          <span
-            className={`block h-0.5 w-6 bg-navy transition-transform ${
-              open ? "-translate-y-2 -rotate-45" : ""
-            }`}
-          />
-        </button>
+        <div className="flex items-center gap-3 md:hidden">
+          <a
+            href={phoneHref}
+            className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
+            aria-label={`Call ${phoneDisplay}`}
+          >
+            Call
+          </a>
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span
+              className={`block h-0.5 w-6 bg-navy transition-transform ${
+                open ? "translate-y-2 rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-6 bg-navy transition-opacity ${
+                open ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-6 bg-navy transition-transform ${
+                open ? "-translate-y-2 -rotate-45" : ""
+              }`}
+            />
+          </button>
+        </div>
       </nav>
 
       {open && (
@@ -85,6 +105,15 @@ export default function Nav() {
                 </Link>
               </li>
             ))}
+            <li>
+              <a
+                href={phoneHref}
+                className="font-display text-2xl font-bold text-navy"
+                onClick={() => setOpen(false)}
+              >
+                {phoneDisplay}
+              </a>
+            </li>
           </ul>
           <Link
             href="/#contact"
