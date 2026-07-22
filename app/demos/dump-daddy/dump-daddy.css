@@ -1,0 +1,201 @@
+.dd-root {
+  --dd-ink: #0a0a0a;
+  --dd-charcoal: #141414;
+  --dd-steel: #2a2a2a;
+  --dd-yellow: #f5c518;
+  --dd-yellow-hot: #ffd84a;
+  --dd-cream: #ebebeb;
+  --dd-muted: #6b6b6b;
+  --dd-mist: #a8a8a8;
+
+  color: var(--dd-ink);
+  background: var(--dd-cream);
+  font-family: var(--font-dd-body), "Segoe UI", sans-serif;
+}
+
+.dd-root ::selection {
+  background: color-mix(in srgb, var(--dd-yellow) 55%, transparent);
+  color: var(--dd-ink);
+}
+
+.dd-display {
+  font-family: var(--font-dd-display), Impact, "Arial Black", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+}
+
+.dd-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.12;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+@keyframes dd-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dd-kenburns {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.dd-rise {
+  animation: dd-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dd-rise-1 {
+  animation-delay: 0.1s;
+}
+
+.dd-rise-2 {
+  animation-delay: 0.2s;
+}
+
+.dd-rise-3 {
+  animation-delay: 0.3s;
+}
+
+.dd-hero-image {
+  animation: dd-kenburns 16s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dd-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dd-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dd-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--dd-yellow);
+  color: var(--dd-ink);
+  font-family: var(--font-dd-display), sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.5rem;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.dd-cta:hover {
+  background: var(--dd-yellow-hot);
+  transform: translateY(-1px);
+}
+
+.dd-cta:disabled {
+  opacity: 0.65;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.dd-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-dd-display), sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 0.35rem;
+  border-bottom: 2px solid var(--dd-yellow);
+  transition: color 0.2s ease;
+}
+
+.dd-cta-ghost:hover {
+  color: var(--dd-yellow);
+}
+
+.dd-nav-link {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.dd-nav-link:hover {
+  color: var(--dd-yellow);
+}
+
+.dd-demo-banner {
+  background: var(--dd-ink);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.8rem;
+  border-bottom: 2px solid var(--dd-yellow);
+}
+
+.dd-demo-banner-link {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.dd-demo-banner-back {
+  color: var(--dd-yellow);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.dd-service-row {
+  border-top: 1px solid color-mix(in srgb, var(--dd-ink) 12%, transparent);
+}
+
+.dd-service-row:last-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--dd-ink) 12%, transparent);
+}
+
+.dd-input {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--dd-ink) 18%, transparent);
+  background: #fff;
+  color: var(--dd-ink);
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.dd-input:focus {
+  border-color: var(--dd-yellow);
+}
+
+.dd-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dd-muted);
+}

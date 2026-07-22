@@ -48,9 +48,20 @@ export default function Nav() {
               {business.phone}
             </a>
           </li>
+          <li>
+            <Link href="/book" className="cta-primary !px-4 !py-2.5 text-sm">
+              Book a call
+            </Link>
+          </li>
         </ul>
 
         <div className="flex items-center gap-3 md:hidden">
+          <Link
+            href="/book"
+            className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
+          >
+            Book
+          </Link>
           <a
             href={business.phoneTel}
             className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
@@ -106,6 +117,15 @@ export default function Nav() {
               >
                 {business.phone}
               </a>
+            </li>
+            <li className="pt-2">
+              <Link
+                href="/book"
+                className="cta-primary text-base"
+                onClick={() => setOpen(false)}
+              >
+                Book a call
+              </Link>
             </li>
           </ul>
         </div>
