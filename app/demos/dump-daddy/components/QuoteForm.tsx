@@ -19,7 +19,7 @@ export default function QuoteForm() {
 
   if (status === "success") {
     return (
-      <div className="border-2 border-[var(--dd-yellow)] bg-white p-8 md:p-10">
+      <div className="border-2 border-[var(--dd-red)] bg-white p-8 md:p-10">
         <p className="dd-display text-3xl text-[var(--dd-ink)] md:text-4xl">
           Got it — we&apos;ll be in touch.
         </p>
@@ -27,7 +27,7 @@ export default function QuoteForm() {
           Prefer to talk now? Call or text{" "}
           <a
             href={company.phoneHref}
-            className="font-bold text-[var(--dd-ink)] underline decoration-[var(--dd-yellow)] underline-offset-4"
+            className="font-bold text-[var(--dd-ink)] underline decoration-[var(--dd-red)] underline-offset-4"
           >
             {company.phone}
           </a>

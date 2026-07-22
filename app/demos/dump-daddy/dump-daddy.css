@@ -2,8 +2,8 @@
   --dd-ink: #0a0a0a;
   --dd-charcoal: #141414;
   --dd-steel: #2a2a2a;
-  --dd-yellow: #f5c518;
-  --dd-yellow-hot: #ffd84a;
+  --dd-red: #e10600;
+  --dd-red-hot: #ff1a12;
   --dd-cream: #ebebeb;
   --dd-muted: #6b6b6b;
   --dd-mist: #a8a8a8;
@@ -14,7 +14,7 @@
 }
 
 .dd-root ::selection {
-  background: color-mix(in srgb, var(--dd-yellow) 55%, transparent);
+  background: color-mix(in srgb, var(--dd-red) 55%, transparent);
   color: var(--dd-ink);
 }
 
@@ -90,7 +90,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--dd-yellow);
+  background: var(--dd-red);
   color: var(--dd-ink);
   font-family: var(--font-dd-display), sans-serif;
   font-weight: 800;
@@ -104,7 +104,7 @@
 }
 
 .dd-cta:hover {
-  background: var(--dd-yellow-hot);
+  background: var(--dd-red-hot);
   transform: translateY(-1px);
 }
 
@@ -125,12 +125,12 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.95rem 0.35rem;
-  border-bottom: 2px solid var(--dd-yellow);
+  border-bottom: 2px solid var(--dd-red);
   transition: color 0.2s ease;
 }
 
 .dd-cta-ghost:hover {
-  color: var(--dd-yellow);
+  color: var(--dd-red);
 }
 
 .dd-nav-link {
@@ -143,14 +143,14 @@
 }
 
 .dd-nav-link:hover {
-  color: var(--dd-yellow);
+  color: var(--dd-red);
 }
 
 .dd-demo-banner {
   background: var(--dd-ink);
   color: rgba(255, 255, 255, 0.72);
   font-size: 0.8rem;
-  border-bottom: 2px solid var(--dd-yellow);
+  border-bottom: 2px solid var(--dd-red);
 }
 
 .dd-demo-banner-link {
@@ -160,7 +160,7 @@
 }
 
 .dd-demo-banner-back {
-  color: var(--dd-yellow);
+  color: var(--dd-red);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -187,7 +187,7 @@
 }
 
 .dd-input:focus {
-  border-color: var(--dd-yellow);
+  border-color: var(--dd-red);
 }
 
 .dd-label {

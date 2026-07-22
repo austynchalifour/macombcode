@@ -27,7 +27,7 @@ export default function Hero() {
       <SiteNav />
 
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-32 md:px-8 md:pb-20">
-        <p className="dd-rise dd-display text-[clamp(3.2rem,10vw,7rem)] text-[var(--dd-yellow)]">
+        <p className="dd-rise dd-display text-[clamp(3.2rem,10vw,7rem)] text-[var(--dd-red)]">
           Dump Daddy
         </p>
         <h1 className="dd-rise dd-rise-1 mt-3 max-w-2xl dd-display text-[clamp(1.8rem,4.5vw,3.2rem)] text-white">

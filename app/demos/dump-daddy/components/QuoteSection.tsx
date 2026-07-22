@@ -7,7 +7,7 @@ export default function QuoteSection() {
     <section id="quote" className="bg-[var(--dd-charcoal)] text-white">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 md:grid-cols-2 md:gap-16 md:px-8 md:py-28">
         <Reveal>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--dd-yellow)]">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--dd-red)]">
             Free estimate
           </p>
           <h2 className="dd-display mt-3 text-5xl md:text-6xl">
@@ -21,7 +21,7 @@ export default function QuoteSection() {
             <p>
               <a
                 href={company.phoneHref}
-                className="dd-display text-2xl text-[var(--dd-yellow)] transition hover:text-white"
+                className="dd-display text-2xl text-[var(--dd-red)] transition hover:text-white"
               >
                 {company.phone}
               </a>
@@ -29,7 +29,7 @@ export default function QuoteSection() {
             <p>
               <a
                 href={`mailto:${company.email}`}
-                className="text-base underline decoration-white/30 underline-offset-4 hover:decoration-[var(--dd-yellow)]"
+                className="text-base underline decoration-white/30 underline-offset-4 hover:decoration-[var(--dd-red)]"
               >
                 {company.email}
               </a>

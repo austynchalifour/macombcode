@@ -10,7 +10,7 @@ export default function SiteNav() {
           className="dd-display text-2xl text-white md:text-3xl"
         >
           Dump Daddy
-          <span className="mt-0.5 block text-[0.45em] tracking-[0.18em] text-[var(--dd-yellow)]">
+          <span className="mt-0.5 block text-[0.45em] tracking-[0.18em] text-[var(--dd-red)]">
             Junk Removal
           </span>
         </Link>

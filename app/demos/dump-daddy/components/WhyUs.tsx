@@ -6,7 +6,7 @@ export default function WhyUs() {
     <section id="why" className="bg-[var(--dd-ink)] text-white">
       <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
         <Reveal>
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--dd-yellow)]">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--dd-red)]">
             Why Dump Daddy
           </p>
           <h2 className="dd-display mt-3 max-w-2xl text-5xl md:text-6xl">
@@ -18,7 +18,7 @@ export default function WhyUs() {
           {promises.map((item, i) => (
             <li key={item.title}>
               <Reveal>
-                <p className="dd-display text-sm text-[var(--dd-yellow)]">
+                <p className="dd-display text-sm text-[var(--dd-red)]">
                   0{i + 1}
                 </p>
                 <h3 className="dd-display mt-2 text-3xl md:text-4xl">
