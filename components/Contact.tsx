@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import Reveal from "./Reveal";
+import { business } from "@/data/business";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -73,12 +74,21 @@ export default function Contact() {
             Share a few details and we&apos;ll follow up on scope, timeline, and
             next steps.
           </p>
-          <a
-            href="mailto:info@macombcode.com"
-            className="mt-5 inline-block font-display text-lg font-bold text-navy transition-colors hover:text-orange"
-          >
-            info@macombcode.com
-          </a>
+          <div className="mt-5 flex flex-col gap-2">
+            <a
+              href={business.phoneTel}
+              className="inline-block font-display text-lg font-bold text-navy transition-colors hover:text-orange"
+            >
+              {business.phone}
+            </a>
+            <a
+              href={`mailto:${business.email}`}
+              className="inline-block font-display text-lg font-bold text-navy transition-colors hover:text-orange"
+            >
+              {business.email}
+            </a>
+            <p className="text-sm text-ink-muted">Serving Macomb County, MI</p>
+          </div>
         </Reveal>
 
         <Reveal>

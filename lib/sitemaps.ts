@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { cities } from "@/data/cities";
+import { serviceCityPages } from "@/data/service-cities";
 import { services } from "@/data/services";
 
 export const SITE_URL = "https://macombcode.com";
@@ -28,10 +29,21 @@ export function buildMainSitemap(): MetadataRoute.Sitemap {
     }),
   );
 
+  const serviceCityEntries = serviceCityPages.map((page) =>
+    entry(`/services/${page.serviceSlug}/${page.citySlug}`, {
+      changeFrequency: "monthly",
+      priority: 0.8,
+    }),
+  );
+
   return [
     entry("/", { changeFrequency: "weekly", priority: 1 }),
     entry("/cities", { changeFrequency: "monthly", priority: 0.9 }),
     entry("/services", { changeFrequency: "monthly", priority: 0.9 }),
+    entry("/guides/web-design-macomb-county", {
+      changeFrequency: "monthly",
+      priority: 0.85,
+    }),
     entry("/analyze", { changeFrequency: "weekly", priority: 0.8 }),
     entry("/book", { changeFrequency: "weekly", priority: 0.85 }),
     entry("/referral", { changeFrequency: "monthly", priority: 0.7 }),
@@ -42,6 +54,7 @@ export function buildMainSitemap(): MetadataRoute.Sitemap {
     entry("/demos/harbor-point-dental", { priority: 0.6 }),
     entry("/demos/northside-supply", { priority: 0.6 }),
     ...serviceEntries,
+    ...serviceCityEntries,
   ];
 }
 
@@ -106,6 +119,10 @@ export function getSiteMapGroups() {
         { href: "/", label: "Home" },
         { href: "/services", label: "Services" },
         { href: "/cities", label: "Service areas" },
+        {
+          href: "/guides/web-design-macomb-county",
+          label: "Web design Macomb County guide",
+        },
         { href: "/analyze", label: "Website analyzer" },
         { href: "/book", label: "Book a call" },
         { href: "/referral", label: "Referral program" },
@@ -119,6 +136,18 @@ export function getSiteMapGroups() {
         href: `/services/${service.slug}`,
         label: service.name,
       })),
+    },
+    {
+      title: "Service areas (web design)",
+      links: serviceCityPages.map((page) => {
+        const city = cities.find((c) => c.slug === page.citySlug);
+        return {
+          href: `/services/${page.serviceSlug}/${page.citySlug}`,
+          label: city
+            ? `Web design in ${city.name}`
+            : `Web design — ${page.citySlug}`,
+        };
+      }),
     },
     {
       title: "Demos",

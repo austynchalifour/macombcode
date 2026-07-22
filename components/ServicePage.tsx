@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { featuredCitySlugs } from "@/data/business";
+import { getCityBySlug } from "@/data/cities";
 import { services, type Service } from "@/data/services";
 
 function contactHref(planName: string) {
@@ -9,6 +11,9 @@ function contactHref(planName: string) {
 
 export default function ServicePage({ service }: { service: Service }) {
   const others = services.filter((item) => item.slug !== service.slug);
+  const featuredCities = featuredCitySlugs
+    .map((slug) => getCityBySlug(slug))
+    .filter((city): city is NonNullable<typeof city> => Boolean(city));
 
   return (
     <>
@@ -16,7 +21,27 @@ export default function ServicePage({ service }: { service: Service }) {
         <div className="hero-grain absolute inset-0" aria-hidden />
         <Nav />
         <section className="relative z-10 mx-auto max-w-7xl px-5 pb-16 pt-10 md:px-10 md:pb-24 md:pt-14">
-          <p className="font-display text-xs font-bold uppercase tracking-[0.2em] text-orange">
+          <nav aria-label="Breadcrumb" className="text-sm text-ink-muted">
+            <ol className="flex flex-wrap items-center gap-2">
+              <li>
+                <Link href="/" className="transition-colors hover:text-navy">
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li>
+                <Link
+                  href="/services"
+                  className="transition-colors hover:text-navy"
+                >
+                  Services
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li className="font-medium text-navy">{service.name}</li>
+            </ol>
+          </nav>
+          <p className="mt-6 font-display text-xs font-bold uppercase tracking-[0.2em] text-orange">
             Macomb Code · {service.eyebrow}
           </p>
           <h1 className="mt-4 max-w-4xl font-display text-[clamp(2.4rem,5.5vw,4.2rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy">
@@ -116,6 +141,38 @@ export default function ServicePage({ service }: { service: Service }) {
                 </div>
               </li>
             ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="border-t border-mist bg-paper">
+        <div className="mx-auto max-w-7xl px-5 py-16 md:px-10 md:py-24">
+          <h2 className="font-display text-3xl font-extrabold tracking-[-0.03em] text-navy md:text-4xl">
+            Serving Macomb County
+          </h2>
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-muted italic">
+            We build for businesses across Macomb County and Metro Detroit —
+            from Sterling Heights to St. Clair Shores and everywhere between.
+          </p>
+          <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2">
+            {featuredCities.map((city) => (
+              <li key={city.slug}>
+                <Link
+                  href={`/cities/${city.slug}`}
+                  className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
+                >
+                  {city.name}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link
+                href="/cities"
+                className="font-display text-sm font-semibold text-orange transition-colors hover:text-navy"
+              >
+                All service areas →
+              </Link>
+            </li>
           </ul>
         </div>
       </section>

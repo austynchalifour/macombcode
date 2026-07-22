@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { business } from "@/data/business";
 import { cities, typeLabel, type City } from "@/data/cities";
 
 const services = [
@@ -24,12 +25,39 @@ const services = [
   },
 ];
 
+function cityFaqs(city: City, nearbyNames: string[]) {
+  const label = typeLabel(city.type);
+  const nearby =
+    nearbyNames.length > 0
+      ? nearbyNames.slice(0, 4).join(", ")
+      : "nearby Macomb County communities";
+
+  return [
+    {
+      question: `Do you build websites for ${city.name} businesses?`,
+      answer: `Yes. Macomb Code designs and builds websites and custom software for businesses in ${city.name} and across Macomb County. Whether you run a shop, clinic, contractor business, or professional practice in this ${label}, we focus on clear offers, speed, and local search so customers nearby can find you.`,
+    },
+    {
+      question: `What areas near ${city.name} do you serve?`,
+      answer: `We serve all of Macomb County and Metro Detroit. Near ${city.name}, that often includes ${nearby}. If you work across multiple towns, we can structure your site so you show up for the right local searches.`,
+    },
+    {
+      question: `How do I get started with Macomb Code in ${city.name}?`,
+      answer: `Call ${business.phone}, email ${business.email}, or book a short walkthrough. We’ll talk through your goals, timeline, and whether a website, software, or monthly retainer fits best.`,
+    },
+  ];
+}
+
 export default function CityPage({ city }: { city: City }) {
   const related = cities
     .filter((c) => c.region === city.region && c.slug !== city.slug)
     .slice(0, 6);
 
   const label = typeLabel(city.type);
+  const faqs = cityFaqs(
+    city,
+    related.map((item) => item.name),
+  );
 
   return (
     <>
@@ -37,7 +65,27 @@ export default function CityPage({ city }: { city: City }) {
         <div className="hero-grain absolute inset-0" aria-hidden />
         <Nav />
         <section className="relative z-10 mx-auto max-w-7xl px-5 pb-16 pt-10 md:px-10 md:pb-24 md:pt-14">
-          <p className="font-display text-xs font-bold uppercase tracking-[0.2em] text-orange">
+          <nav aria-label="Breadcrumb" className="text-sm text-ink-muted">
+            <ol className="flex flex-wrap items-center gap-2">
+              <li>
+                <Link href="/" className="transition-colors hover:text-navy">
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li>
+                <Link
+                  href="/cities"
+                  className="transition-colors hover:text-navy"
+                >
+                  Cities
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li className="font-medium text-navy">{city.name}</li>
+            </ol>
+          </nav>
+          <p className="mt-6 font-display text-xs font-bold uppercase tracking-[0.2em] text-orange">
             {city.name}, Michigan · Macomb County
           </p>
           <h1 className="mt-4 max-w-4xl font-display text-[clamp(2.4rem,5.5vw,4.2rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy">
@@ -45,14 +93,17 @@ export default function CityPage({ city }: { city: City }) {
           </h1>
           <p className="mt-6 max-w-2xl text-xl leading-relaxed text-ink-muted italic">
             Macomb Code builds websites and custom software for local businesses
-            in this {label}. {city.highlight}
+            in this {label}.
+          </p>
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-navy/80">
+            {city.highlight}
           </p>
           <div className="mt-8 flex flex-wrap gap-5">
-            <Link href="/#contact" className="cta-primary text-base">
-              Start a project
-            </Link>
-            <Link href="/cities" className="cta-secondary text-base">
-              All Macomb areas
+            <a href={business.phoneTel} className="cta-primary text-base">
+              Call {business.phone}
+            </a>
+            <Link href="/#contact" className="cta-secondary text-base">
+              Contact us
             </Link>
           </div>
         </section>
@@ -135,6 +186,26 @@ export default function CityPage({ city }: { city: City }) {
         </div>
       </section>
 
+      <section className="border-t border-mist bg-paper">
+        <div className="mx-auto max-w-7xl px-5 py-16 md:px-10 md:py-24">
+          <h2 className="font-display text-3xl font-extrabold tracking-[-0.03em] text-navy md:text-4xl">
+            FAQ for {city.name} businesses
+          </h2>
+          <dl className="mt-10 max-w-3xl space-y-8">
+            {faqs.map((faq) => (
+              <div key={faq.question}>
+                <dt className="font-display text-xl font-bold text-navy">
+                  {faq.question}
+                </dt>
+                <dd className="mt-3 leading-relaxed text-ink-muted">
+                  {faq.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       <section className="bg-paper-warm">
         <div className="mx-auto max-w-7xl px-5 py-16 md:px-10 md:py-24">
           <h2 className="font-display text-3xl font-extrabold tracking-[-0.03em] text-navy md:text-4xl">
@@ -142,18 +213,30 @@ export default function CityPage({ city }: { city: City }) {
           </h2>
           <p className="mt-4 max-w-xl text-lg leading-relaxed text-ink-muted italic">
             Tell us what you need — a new website, custom software, or a refresh
-            that actually brings in work. Email{" "}
+            that actually brings in work. Call{" "}
             <a
-              href="mailto:info@macombcode.com"
+              href={business.phoneTel}
               className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
             >
-              info@macombcode.com
+              {business.phone}
+            </a>{" "}
+            or email{" "}
+            <a
+              href={`mailto:${business.email}`}
+              className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
+            >
+              {business.email}
             </a>
             .
           </p>
-          <Link href="/#contact" className="cta-primary mt-8 inline-flex text-base">
-            Contact Macomb Code
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <a href={business.phoneTel} className="cta-primary text-base">
+              Call {business.phone}
+            </a>
+            <Link href="/#contact" className="cta-secondary text-base">
+              Contact Macomb Code
+            </Link>
+          </div>
 
           {related.length > 0 && (
             <div className="mt-16 border-t border-mist pt-10">
@@ -181,3 +264,5 @@ export default function CityPage({ city }: { city: City }) {
     </>
   );
 }
+
+export { cityFaqs };

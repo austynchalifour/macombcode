@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Bricolage_Grotesque, Newsreader } from "next/font/google";
 import Script from "next/script";
+import JsonLd from "@/components/JsonLd";
+import { business } from "@/data/business";
+import { sitewideJsonLd } from "@/lib/seo";
 import "./globals.css";
 
 const GA_MEASUREMENT_ID = "G-8G28DBKQ27";
@@ -20,13 +23,32 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://macombcode.com"),
+  metadataBase: new URL(business.url),
   title: {
     default: "Macomb Code | Websites & Software for Local Businesses",
-    template: "%s",
+    template: "%s | Macomb Code",
   },
-  description:
-    "Macomb Code builds modern websites and custom software for local businesses across Macomb County and Metro Detroit.",
+  description: business.description,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: business.url,
+    siteName: business.name,
+    title: "Macomb Code | Websites & Software for Local Businesses",
+    description: business.description,
+    images: [
+      {
+        url: business.ogImage,
+        alt: business.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Macomb Code | Websites & Software for Local Businesses",
+    description: business.description,
+    images: [business.ogImage],
+  },
 };
 
 export default function RootLayout({
@@ -40,6 +62,7 @@ export default function RootLayout({
       className={`${bricolage.variable} ${newsreader.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans text-navy">
+        <JsonLd data={sitewideJsonLd()} />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           strategy="afterInteractive"

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { business } from "@/data/business";
 
 const links = [
   { href: "/#work", label: "Work" },
@@ -10,9 +11,6 @@ const links = [
   { href: "/#approach", label: "Approach" },
   { href: "/#contact", label: "Contact" },
 ];
-
-const phoneDisplay = "586-368-2259";
-const phoneHref = "tel:+15863682259";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
@@ -44,19 +42,19 @@ export default function Nav() {
           ))}
           <li>
             <a
-              href={phoneHref}
+              href={business.phoneTel}
               className="font-display text-sm font-semibold text-navy/70 transition-colors hover:text-orange"
             >
-              {phoneDisplay}
+              {business.phone}
             </a>
           </li>
         </ul>
 
         <div className="flex items-center gap-3 md:hidden">
           <a
-            href={phoneHref}
+            href={business.phoneTel}
             className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
-            aria-label={`Call ${phoneDisplay}`}
+            aria-label={`Call ${business.phone}`}
           >
             Call
           </a>
@@ -102,11 +100,11 @@ export default function Nav() {
             ))}
             <li>
               <a
-                href={phoneHref}
+                href={business.phoneTel}
                 className="font-display text-2xl font-bold text-navy"
                 onClick={() => setOpen(false)}
               >
-                {phoneDisplay}
+                {business.phone}
               </a>
             </li>
           </ul>

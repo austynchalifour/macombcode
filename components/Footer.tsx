@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { business } from "@/data/business";
 
 const navLinks = [
   { href: "/#work", label: "Work" },
@@ -16,7 +17,7 @@ export default function Footer() {
           <div>
             <Image
               src="/logo.png"
-              alt="Macomb Code"
+              alt={business.name}
               width={360}
               height={180}
               className="h-auto w-[148px] md:w-[168px]"
@@ -24,6 +25,28 @@ export default function Footer() {
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-muted">
               Websites and software for local businesses across Macomb County.
             </p>
+            <div className="mt-5 space-y-1.5 text-sm text-ink-muted">
+              <p className="font-display font-semibold text-navy">
+                {business.name}
+              </p>
+              <p>
+                <a
+                  href={business.phoneTel}
+                  className="transition-colors hover:text-navy"
+                >
+                  {business.phone}
+                </a>
+              </p>
+              <p>
+                <a
+                  href={`mailto:${business.email}`}
+                  className="transition-colors hover:text-navy"
+                >
+                  {business.email}
+                </a>
+              </p>
+              <p>Serving Macomb County, MI</p>
+            </div>
           </div>
 
           <div>
@@ -46,24 +69,23 @@ export default function Footer() {
 
           <div>
             <p className="font-display text-xs font-bold uppercase tracking-[0.18em] text-orange">
-              Contact
+              Explore
             </p>
             <ul className="mt-4 space-y-2.5 text-sm text-ink-muted">
-              <li>
-                <a
-                  href="mailto:info@macombcode.com"
-                  className="transition-colors hover:text-navy"
-                >
-                  info@macombcode.com
-                </a>
-              </li>
-              <li>Macomb County, Michigan</li>
               <li>
                 <Link
                   href="/cities"
                   className="transition-colors hover:text-navy"
                 >
                   Service areas
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/guides/web-design-macomb-county"
+                  className="transition-colors hover:text-navy"
+                >
+                  Macomb County guide
                 </Link>
               </li>
               <li>
@@ -95,7 +117,9 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col gap-2 border-t border-mist pt-6 text-xs text-ink-muted/70 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Macomb Code. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} {business.name}. All rights reserved.
+          </p>
           <p>Serving businesses across Macomb County.</p>
         </div>
       </div>
