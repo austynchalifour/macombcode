@@ -15,7 +15,7 @@ export default function Contact() {
     const plan = new URLSearchParams(window.location.search).get("plan");
     if (!plan) return;
     setMessage(
-      `I'm interested in the ${plan} retainer. Here's a bit about what I need:\n\n`,
+      `I'm interested in ${plan}. Here's a bit about what I need:\n\n`,
     );
   }, []);
 

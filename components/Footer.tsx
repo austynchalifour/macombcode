@@ -106,6 +106,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/offer"
+                  className="transition-colors hover:text-navy"
+                >
+                  Website In A Day
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/referral"
                   className="transition-colors hover:text-navy"
                 >
