@@ -2,6 +2,8 @@ import { Resend } from "resend";
 import type { Booking } from "@/lib/bookings";
 import { formatBookingWhen } from "@/lib/bookings";
 import { bookingConfig } from "@/data/booking-config";
+import { websiteInADayOffer } from "@/data/offer";
+import type { OfferOrder } from "@/lib/offer-orders";
 
 type SendContactEmailInput = {
   name: string;
@@ -186,6 +188,72 @@ export async function sendBookingEmails(
   if (owner.error) return { ok: false, error: owner.error.message };
 
   return { ok: true, id: guest.data?.id };
+}
+
+export async function sendOfferPurchaseEmail(
+  order: OfferOrder,
+): Promise<SendEmailResult> {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  if (!apiKey) {
+    return { ok: false, error: "RESEND_API_KEY is not configured." };
+  }
+
+  const to = getNotifyEmail();
+  if (!to) {
+    return { ok: false, error: "CONTACT_NOTIFY_EMAIL is not configured." };
+  }
+
+  const amount =
+    typeof order.amountTotal === "number"
+      ? `$${(order.amountTotal / 100).toFixed(2)}`
+      : websiteInADayOffer.priceLabel;
+
+  const resend = new Resend(apiKey);
+  const subject = `New ${websiteInADayOffer.name} purchase — ${amount}`;
+  const text = [
+    `New ${websiteInADayOffer.name} purchase on macombcode.com`,
+    "",
+    `Name: ${order.customerName || "(not provided)"}`,
+    `Email: ${order.customerEmail || "(not provided)"}`,
+    `Amount: ${amount}`,
+    `Checkout session: ${order.stripeCheckoutSessionId}`,
+    `Customer ID: ${order.stripeCustomerId || "(none)"}`,
+    `Payment intent: ${order.stripePaymentIntentId || "(none)"}`,
+    `Order ID: ${order.id}`,
+  ].join("\n");
+
+  const html = `
+    <div style="font-family: Georgia, serif; color: #102030; line-height: 1.5;">
+      <p style="margin: 0 0 16px; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #d85818; font-weight: 700;">
+        ${escapeHtml(websiteInADayOffer.name)} purchase
+      </p>
+      <p style="margin: 0 0 8px;"><strong>Name:</strong> ${escapeHtml(order.customerName || "(not provided)")}</p>
+      <p style="margin: 0 0 8px;"><strong>Email:</strong> ${
+        order.customerEmail
+          ? `<a href="mailto:${escapeHtml(order.customerEmail)}">${escapeHtml(order.customerEmail)}</a>`
+          : "(not provided)"
+      }</p>
+      <p style="margin: 0 0 8px;"><strong>Amount:</strong> ${escapeHtml(amount)}</p>
+      <p style="margin: 0 0 8px;"><strong>Checkout session:</strong> ${escapeHtml(order.stripeCheckoutSessionId)}</p>
+      <p style="margin: 0 0 8px;"><strong>Customer ID:</strong> ${escapeHtml(order.stripeCustomerId || "(none)")}</p>
+      <p style="margin: 0;"><strong>Order ID:</strong> ${escapeHtml(order.id)}</p>
+    </div>
+  `;
+
+  const { data, error } = await resend.emails.send({
+    from: getFromEmail(),
+    to: [to],
+    replyTo: order.customerEmail || undefined,
+    subject,
+    text,
+    html,
+  });
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  return { ok: true, id: data?.id };
 }
 
 function escapeHtml(value: string) {

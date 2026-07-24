@@ -2,7 +2,9 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import OfferCheckoutButton from "@/components/OfferCheckoutButton";
 import { business } from "@/data/business";
+import { websiteInADayOffer } from "@/data/offer";
 
 const included = [
   "One-page or simple multi-section business site",
@@ -50,7 +52,13 @@ const fit = [
   },
 ];
 
-export default function OfferPage() {
+export default async function OfferPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ canceled?: string }>;
+}) {
+  const { canceled } = await searchParams;
+
   return (
     <>
       <div className="hero-atmosphere relative min-h-[78svh] overflow-hidden md:min-h-[82svh]">
@@ -61,17 +69,22 @@ export default function OfferPage() {
             {business.name}
           </p>
           <h1 className="animate-rise animate-rise-delay-1 mt-4 max-w-4xl font-display text-[clamp(2.6rem,6vw,4.6rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-navy">
-            Website In A Day
-            <span className="mt-2 block text-orange">for $500.</span>
+            {websiteInADayOffer.name}
+            <span className="mt-2 block text-orange">
+              for {websiteInADayOffer.priceLabel}.
+            </span>
           </h1>
           <p className="animate-rise animate-rise-delay-2 mt-6 max-w-xl text-xl leading-relaxed text-ink-muted italic md:text-[1.35rem]">
             One focused day. A live site before sundown. Built for Macomb County
             businesses that need to get online now.
           </p>
+          {canceled ? (
+            <p className="animate-rise animate-rise-delay-2 mt-4 max-w-xl text-base text-orange">
+              Checkout was canceled. You can buy whenever you&apos;re ready.
+            </p>
+          ) : null}
           <div className="animate-rise animate-rise-delay-3 mt-8 flex flex-wrap items-center gap-5">
-            <Link href="/book" className="cta-primary text-base">
-              Claim the offer
-            </Link>
+            <OfferCheckoutButton label={`Buy for ${websiteInADayOffer.priceLabel}`} />
             <Link
               href="/?plan=Website%20In%20A%20Day#contact"
               className="cta-secondary text-base"
@@ -170,19 +183,17 @@ export default function OfferPage() {
         <div className="mx-auto max-w-7xl px-5 py-16 md:px-10 md:py-20">
           <Reveal>
             <p className="font-display text-xs font-bold uppercase tracking-[0.22em] text-orange">
-              $500 flat
+              {websiteInADayOffer.priceLabel} flat
             </p>
             <h2 className="mt-3 max-w-2xl font-display text-3xl font-extrabold tracking-[-0.03em] md:text-4xl">
               Ready to get online in a day?
             </h2>
             <p className="mt-4 max-w-xl text-lg leading-relaxed text-paper/75 italic">
-              Book a call and we&apos;ll lock your build day. Prefer to write
-              first? Send a note — we usually reply the same business day.
+              Pay securely with Stripe, then we&apos;ll schedule your build day.
+              Prefer to talk first? Call or send a note.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-5">
-              <Link href="/book" className="cta-primary text-base">
-                Book your day
-              </Link>
+              <OfferCheckoutButton label="Buy now" />
               <a
                 href={business.phoneTel}
                 className="font-display text-base font-semibold text-paper underline decoration-orange/50 underline-offset-4 transition-colors hover:text-orange"
