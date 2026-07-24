@@ -82,10 +82,34 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/industries"
+                  className="transition-colors hover:text-navy"
+                >
+                  Industries
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services/web-design"
+                  className="transition-colors hover:text-navy"
+                >
+                  Web design
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/guides/web-design-macomb-county"
                   className="transition-colors hover:text-navy"
                 >
                   Macomb County guide
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#work"
+                  className="transition-colors hover:text-navy"
+                >
+                  Demos
                 </Link>
               </li>
               <li>
@@ -102,6 +126,14 @@ export default function Footer() {
                   className="transition-colors hover:text-navy"
                 >
                   Book a call
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/analyze"
+                  className="transition-colors hover:text-navy"
+                >
+                  Free website review
                 </Link>
               </li>
               <li>

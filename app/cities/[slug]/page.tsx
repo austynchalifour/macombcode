@@ -4,6 +4,7 @@ import CityPage, { cityFaqs } from "@/components/CityPage";
 import JsonLd from "@/components/JsonLd";
 import { business } from "@/data/business";
 import { cities, getCityBySlug, typeLabel } from "@/data/cities";
+import { cityHubDescription, cityHubTitle } from "@/lib/seo-content";
 import { breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 
 type Props = {
@@ -19,8 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const city = getCityBySlug(slug);
   if (!city) return {};
 
-  const title = `Web Design in ${city.name}, MI`;
-  const description = `Websites and custom software for businesses in ${city.name}, Michigan. Macomb Code helps ${typeLabel(city.type)} companies get found online and win more work.`;
+  const title = cityHubTitle(city);
+  const description = cityHubDescription(city, typeLabel(city.type));
 
   return {
     title,
@@ -54,7 +55,7 @@ export default async function CityRoutePage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: business.name,
-    description: `Web design and custom software for businesses in ${city.name}, Michigan.`,
+    description: `Websites, software, and AI solutions for businesses in ${city.name}, Michigan.`,
     url: `${business.url}/cities/${city.slug}`,
     email: business.email,
     telephone: business.phoneTel.replace("tel:", ""),

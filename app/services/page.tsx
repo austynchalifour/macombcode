@@ -2,14 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { business } from "@/data/business";
 import { services } from "@/data/services";
 
 export const metadata: Metadata = {
-  title: "Services | Macomb Code",
+  title: "Services",
   description:
-    "Website, software, and support retainers for local businesses across Macomb County. Month-to-month plans with clear pricing.",
+    "Web design, software development, AI solutions, and support retainers for local businesses across Macomb County. Month-to-month plans with clear pricing.",
   alternates: {
     canonical: "/services",
+  },
+  openGraph: {
+    title: "Services | Macomb Code",
+    description:
+      "Web design, software development, AI solutions, and support for Macomb County businesses.",
+    type: "website",
+    images: [{ url: business.ogImage, alt: business.name }],
   },
 };
 
@@ -27,15 +35,18 @@ export default function ServicesIndexPage() {
             Services
           </h1>
           <p className="mt-6 max-w-2xl text-xl leading-relaxed text-ink-muted italic">
-            Websites, software, and ongoing support — sold as clear monthly
-            retainers for Macomb County businesses.
+            Web design, software development, AI solutions, and ongoing support —
+            sold as clear monthly retainers for Macomb County businesses.
           </p>
           <div className="mt-8 flex flex-wrap gap-5">
-            <Link href="/#contact" className="cta-primary text-base">
-              Start a retainer
+            <Link href="/book" className="cta-primary text-base">
+              Book A Call
             </Link>
-            <Link href="/#work" className="cta-secondary text-base">
-              See our work
+            <Link href="/analyze" className="cta-secondary text-base">
+              Get Your Free Website Review
+            </Link>
+            <Link href="/industries" className="cta-secondary text-base">
+              Browse industries
             </Link>
           </div>
         </section>

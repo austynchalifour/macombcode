@@ -5,7 +5,7 @@ import JsonLd from "@/components/JsonLd";
 import Nav from "@/components/Nav";
 import { business, featuredCitySlugs } from "@/data/business";
 import { getCityBySlug } from "@/data/cities";
-import { serviceCityPages } from "@/data/service-cities";
+import { industryCityAllowlist } from "@/data/industry-cities";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
 const GUIDE_PATH = "/guides/web-design-macomb-county";
@@ -120,23 +120,33 @@ export default function MacombCountyGuidePage() {
           <ul className="mt-6 space-y-4 text-lg leading-relaxed text-ink-muted">
             <li>
               <Link
-                href="/services/websites"
+                href="/services/web-design"
                 className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
               >
-                Websites
+                Web design
               </Link>{" "}
               — marketing sites and storefronts designed to convert, with
               optional monthly care after launch.
             </li>
             <li>
               <Link
-                href="/services/software"
+                href="/services/software-development"
                 className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
               >
-                Software
+                Software development
               </Link>{" "}
               — custom tools for scheduling, intake, dashboards, and workflows
               that cut busywork.
+            </li>
+            <li>
+              <Link
+                href="/services/ai-solutions"
+                className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
+              >
+                AI solutions
+              </Link>{" "}
+              — practical assistants and automation for lead intake and
+              operations.
             </li>
             <li>
               <Link
@@ -179,13 +189,13 @@ export default function MacombCountyGuidePage() {
             Looking for web design in a specific city? Start here:
           </p>
           <ul className="mt-4 space-y-2">
-            {serviceCityPages.map((page) => {
-              const city = getCityBySlug(page.citySlug);
+            {industryCityAllowlist.map((citySlug) => {
+              const city = getCityBySlug(citySlug);
               if (!city) return null;
               return (
-                <li key={page.citySlug}>
+                <li key={citySlug}>
                   <Link
-                    href={`/services/websites/${page.citySlug}`}
+                    href={`/web-design/${citySlug}`}
                     className="font-display text-base font-semibold text-navy transition-colors hover:text-orange"
                   >
                     Web design in {city.name}
@@ -194,6 +204,16 @@ export default function MacombCountyGuidePage() {
               );
             })}
           </ul>
+          <p className="mt-6 text-lg leading-relaxed text-ink-muted">
+            Explore{" "}
+            <Link
+              href="/industries"
+              className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
+            >
+              industry pages
+            </Link>{" "}
+            for restaurants, roofing, HVAC, dentists, and contractors.
+          </p>
 
           <h2 className="mt-14 font-display text-3xl font-extrabold tracking-[-0.03em] text-navy">
             Next steps

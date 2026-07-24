@@ -11,8 +11,8 @@ export const business = {
   addressLocality: "Macomb County",
   addressRegion: "MI",
   addressCountry: "US",
-  /** Add Google Business Profile and social profile URLs when available */
-  sameAs: [] as string[],
+  /** Google Business Profile and social profile URLs for LocalBusiness sameAs */
+  sameAs: ["https://share.google/K09sPqY84lnRy7x2e"] as string[],
   ogImage: "/logo.png",
 } as const;
 

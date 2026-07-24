@@ -1,4 +1,5 @@
 import Nav from "./Nav";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -21,13 +22,36 @@ export default function Hero() {
               companies win more work.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-5">
-              <a href="#contact" className="cta-primary text-base">
-                Start a project
-              </a>
-              <a href="#work" className="cta-secondary text-base">
-                See our work
-              </a>
+              <Link href="/book" className="cta-primary text-base">
+                Book A Call
+              </Link>
+              <Link href="/analyze" className="cta-secondary text-base">
+                Free Website Review
+              </Link>
             </div>
+            <p className="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-muted">
+              <Link href="/services" className="transition-colors hover:text-navy">
+                Services
+              </Link>
+              <Link href="/cities" className="transition-colors hover:text-navy">
+                Cities
+              </Link>
+              <Link
+                href="/industries"
+                className="transition-colors hover:text-navy"
+              >
+                Industries
+              </Link>
+              <Link
+                href="/guides/web-design-macomb-county"
+                className="transition-colors hover:text-navy"
+              >
+                Guides
+              </Link>
+              <a href="#work" className="transition-colors hover:text-navy">
+                Demos
+              </a>
+            </p>
           </div>
         </div>
       </div>

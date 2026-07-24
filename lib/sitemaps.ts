@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 import { cities } from "@/data/cities";
-import { serviceCityPages } from "@/data/service-cities";
+import { industries } from "@/data/industries";
+import { industryCityPages } from "@/data/industry-cities";
 import { services } from "@/data/services";
+import { webDesignCityPages } from "@/data/web-design-cities";
 
 export const SITE_URL = "https://macombcode.com";
 
@@ -20,19 +22,36 @@ function entry(
   };
 }
 
-/** Main site pages — excludes individual city routes. */
+/** Main site pages — excludes individual /cities/* routes. */
 export function buildMainSitemap(): MetadataRoute.Sitemap {
   const serviceEntries = services.map((service) =>
     entry(`/services/${service.slug}`, {
       changeFrequency: "monthly",
-      priority: 0.85,
+      priority: 0.9,
     }),
   );
 
-  const serviceCityEntries = serviceCityPages.map((page) =>
-    entry(`/services/${page.serviceSlug}/${page.citySlug}`, {
+  const webDesignCityEntries = webDesignCityPages.map((page) =>
+    entry(`/web-design/${page.citySlug}`, {
       changeFrequency: "monthly",
       priority: 0.8,
+    }),
+  );
+
+  const industryEntries = [
+    entry("/industries", { changeFrequency: "monthly", priority: 0.85 }),
+    ...industries.map((industry) =>
+      entry(`/industries/${industry.slug}`, {
+        changeFrequency: "monthly",
+        priority: 0.8,
+      }),
+    ),
+  ];
+
+  const industryCityEntries = industryCityPages.map((page) =>
+    entry(`/web-design/${page.industrySlug}/${page.citySlug}`, {
+      changeFrequency: "monthly",
+      priority: 0.75,
     }),
   );
 
@@ -42,7 +61,7 @@ export function buildMainSitemap(): MetadataRoute.Sitemap {
     entry("/services", { changeFrequency: "monthly", priority: 0.9 }),
     entry("/guides/web-design-macomb-county", {
       changeFrequency: "monthly",
-      priority: 0.85,
+      priority: 0.7,
     }),
     entry("/analyze", { changeFrequency: "weekly", priority: 0.8 }),
     entry("/book", { changeFrequency: "weekly", priority: 0.85 }),
@@ -55,7 +74,9 @@ export function buildMainSitemap(): MetadataRoute.Sitemap {
     entry("/demos/harbor-point-dental", { priority: 0.6 }),
     entry("/demos/northside-supply", { priority: 0.6 }),
     ...serviceEntries,
-    ...serviceCityEntries,
+    ...webDesignCityEntries,
+    ...industryEntries,
+    ...industryCityEntries,
   ];
 }
 
@@ -120,6 +141,7 @@ export function getSiteMapGroups() {
         { href: "/", label: "Home" },
         { href: "/services", label: "Services" },
         { href: "/cities", label: "Service areas" },
+        { href: "/industries", label: "Industries" },
         {
           href: "/guides/web-design-macomb-county",
           label: "Web design Macomb County guide",
@@ -128,7 +150,7 @@ export function getSiteMapGroups() {
         { href: "/book", label: "Book a call" },
         { href: "/offer", label: "Website In A Day" },
         { href: "/referral", label: "Referral program" },
-        { href: "/#work", label: "Work" },
+        { href: "/#work", label: "Work / demos" },
         { href: "/#contact", label: "Contact" },
       ],
     },
@@ -140,14 +162,38 @@ export function getSiteMapGroups() {
       })),
     },
     {
-      title: "Service areas (web design)",
-      links: serviceCityPages.map((page) => {
+      title: "Web design by city",
+      links: webDesignCityPages.map((page) => {
         const city = cities.find((c) => c.slug === page.citySlug);
         return {
-          href: `/services/${page.serviceSlug}/${page.citySlug}`,
+          href: `/web-design/${page.citySlug}`,
           label: city
             ? `Web design in ${city.name}`
             : `Web design — ${page.citySlug}`,
+        };
+      }),
+    },
+    {
+      title: "Industries",
+      links: [
+        { href: "/industries", label: "All industries" },
+        ...industries.map((industry) => ({
+          href: `/industries/${industry.slug}`,
+          label: industry.name,
+        })),
+      ],
+    },
+    {
+      title: "Industry × city",
+      links: industryCityPages.map((page) => {
+        const city = cities.find((c) => c.slug === page.citySlug);
+        const industry = industries.find((i) => i.slug === page.industrySlug);
+        return {
+          href: `/web-design/${page.industrySlug}/${page.citySlug}`,
+          label:
+            city && industry
+              ? `${industry.name} in ${city.name}`
+              : `${page.industrySlug} / ${page.citySlug}`,
         };
       }),
     },

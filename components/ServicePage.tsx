@@ -51,8 +51,11 @@ export default function ServicePage({ service }: { service: Service }) {
             {service.intro}
           </p>
           <div className="mt-8 flex flex-wrap gap-5">
-            <Link href="/#contact" className="cta-primary text-base">
-              Start a retainer
+            <Link href="/book" className="cta-primary text-base">
+              Book A Call
+            </Link>
+            <Link href="/analyze" className="cta-secondary text-base">
+              Get Your Free Website Review
             </Link>
             <Link href="/services" className="cta-secondary text-base">
               All services
@@ -158,7 +161,11 @@ export default function ServicePage({ service }: { service: Service }) {
             {featuredCities.map((city) => (
               <li key={city.slug}>
                 <Link
-                  href={`/cities/${city.slug}`}
+                  href={
+                    service.slug === "web-design"
+                      ? `/web-design/${city.slug}`
+                      : `/cities/${city.slug}`
+                  }
                   className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
                 >
                   {city.name}
@@ -173,6 +180,16 @@ export default function ServicePage({ service }: { service: Service }) {
                 All service areas →
               </Link>
             </li>
+            {service.slug === "web-design" ? (
+              <li>
+                <Link
+                  href="/industries"
+                  className="font-display text-sm font-semibold text-orange transition-colors hover:text-navy"
+                >
+                  Industries →
+                </Link>
+              </li>
+            ) : null}
           </ul>
         </div>
       </section>
@@ -186,9 +203,17 @@ export default function ServicePage({ service }: { service: Service }) {
             Share a few details about your business and the plan you have in
             mind — we&apos;ll follow up on scope, timeline, and next steps.
           </p>
-          <Link href="/#contact" className="cta-primary mt-8 inline-flex text-base">
-            Contact Macomb Code
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link href="/book" className="cta-primary text-base">
+              Book A Call
+            </Link>
+            <Link href="/analyze" className="cta-secondary text-base">
+              Get Your Free Website Review
+            </Link>
+            <Link href="/#contact" className="cta-secondary text-base">
+              Contact Macomb Code
+            </Link>
+          </div>
 
           {others.length > 0 ? (
             <div className="mt-16 border-t border-white/15 pt-10">

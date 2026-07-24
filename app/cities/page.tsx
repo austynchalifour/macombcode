@@ -5,11 +5,18 @@ import Footer from "@/components/Footer";
 import { cities, type CityRegion } from "@/data/cities";
 
 export const metadata: Metadata = {
-  title: "Service Areas Across Macomb County | Macomb Code",
+  title: "Service Areas Across Macomb County",
   description:
     "Macomb Code builds websites and software for businesses in every city, village, and township across Macomb County, Michigan.",
   alternates: {
     canonical: "/cities",
+  },
+  openGraph: {
+    title: "Service Areas Across Macomb County | Macomb Code",
+    description:
+      "Websites and software for every Macomb County city, village, and township.",
+    type: "website",
+    images: [{ url: "/logo.png", alt: "Macomb Code" }],
   },
 };
 
@@ -59,12 +66,40 @@ export default function CitiesIndexPage() {
                       >
                         {city.name}
                       </Link>
+                      <Link
+                        href={`/web-design/${city.slug}`}
+                        className="mt-1 inline-block text-sm text-ink-muted transition-colors hover:text-orange"
+                      >
+                        Web design in {city.name} →
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </div>
             );
           })}
+        </div>
+      </section>
+
+      <section className="bg-paper-warm">
+        <div className="mx-auto max-w-7xl px-5 py-12 md:px-10 md:py-16">
+          <p className="max-w-2xl text-lg leading-relaxed text-ink-muted">
+            Looking for industry-specific sites? Browse{" "}
+            <Link
+              href="/industries"
+              className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
+            >
+              industries we serve
+            </Link>{" "}
+            or{" "}
+            <Link
+              href="/book"
+              className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
+            >
+              book a call
+            </Link>
+            .
+          </p>
         </div>
       </section>
 

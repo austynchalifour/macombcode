@@ -45,6 +45,39 @@ export function sitewideJsonLd() {
         ],
         sameAs: business.sameAs,
         priceRange: "$$",
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Macomb Code services",
+          itemListElement: [
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Website Design",
+                description:
+                  "Marketing websites and storefronts for Macomb County businesses.",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Software Development",
+                description:
+                  "Custom tools for scheduling, intake, dashboards, and workflows.",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "AI Development",
+                description:
+                  "Practical AI assistants and automation for local business operations.",
+              },
+            },
+          ],
+        },
       },
       {
         "@type": "WebSite",
@@ -102,3 +135,40 @@ export function faqJsonLd(
     })),
   };
 }
+
+export function serviceJsonLd(options: {
+  name: string;
+  description: string;
+  path: string;
+  areaServedName?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: options.name,
+    description: options.description,
+    url: `${business.url}${options.path}`,
+    provider: { "@id": `${business.url}/#business` },
+    areaServed: options.areaServedName
+      ? {
+          "@type": "City",
+          name: options.areaServedName,
+          containedInPlace: {
+            "@type": "AdministrativeArea",
+            name: "Macomb County",
+          },
+        }
+      : {
+          "@type": "AdministrativeArea",
+          name: "Macomb County",
+        },
+    serviceType: options.name,
+  };
+}
+
+/** Core services advertised sitewide for LocalBusiness rich results */
+export const coreServiceNames = [
+  "Website Design",
+  "Software Development",
+  "AI Development",
+] as const;

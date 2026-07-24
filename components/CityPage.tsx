@@ -1,21 +1,33 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import RelatedPages from "@/components/seo/RelatedPages";
+import SeoBreadcrumbs from "@/components/seo/SeoBreadcrumbs";
+import SeoCtaBand from "@/components/seo/SeoCtaBand";
+import SeoFaq from "@/components/seo/SeoFaq";
 import { business } from "@/data/business";
 import { cities, typeLabel, type City } from "@/data/cities";
+import { industries } from "@/data/industries";
+import { defaultSeoCtaList, seoCtas } from "@/data/seo-ctas";
 
 const services = [
   {
-    title: "Websites",
-    slug: "websites",
+    title: "Web Design",
+    slug: "web-design",
     copy: (name: string) =>
       `Marketing sites built for ${name} customers — clear offers, fast load times, and mobile-first design that converts.`,
   },
   {
-    title: "Software",
-    slug: "software",
+    title: "Software Development",
+    slug: "software-development",
     copy: (name: string) =>
       `Custom tools for ${name} teams: scheduling, intake, dashboards, and workflows that cut busywork.`,
+  },
+  {
+    title: "AI Solutions",
+    slug: "ai-solutions",
+    copy: (name: string) =>
+      `Practical AI for ${name} businesses — lead triage, assistants, and automation that save hours.`,
   },
   {
     title: "Ongoing support",
@@ -65,31 +77,18 @@ export default function CityPage({ city }: { city: City }) {
         <div className="hero-grain absolute inset-0" aria-hidden />
         <Nav />
         <section className="relative z-10 mx-auto max-w-7xl px-5 pb-16 pt-10 md:px-10 md:pb-24 md:pt-14">
-          <nav aria-label="Breadcrumb" className="text-sm text-ink-muted">
-            <ol className="flex flex-wrap items-center gap-2">
-              <li>
-                <Link href="/" className="transition-colors hover:text-navy">
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden>/</li>
-              <li>
-                <Link
-                  href="/cities"
-                  className="transition-colors hover:text-navy"
-                >
-                  Cities
-                </Link>
-              </li>
-              <li aria-hidden>/</li>
-              <li className="font-medium text-navy">{city.name}</li>
-            </ol>
-          </nav>
+          <SeoBreadcrumbs
+            items={[
+              { name: "Home", href: "/" },
+              { name: "Cities", href: "/cities" },
+              { name: city.name },
+            ]}
+          />
           <p className="mt-6 font-display text-xs font-bold uppercase tracking-[0.2em] text-orange">
             {city.name}, Michigan · Macomb County
           </p>
           <h1 className="mt-4 max-w-4xl font-display text-[clamp(2.4rem,5.5vw,4.2rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy">
-            Web design &amp; software for businesses in {city.name}
+            Websites &amp; software for businesses in {city.name}
           </h1>
           <p className="mt-6 max-w-2xl text-xl leading-relaxed text-ink-muted italic">
             Macomb Code builds websites and custom software for local businesses
@@ -99,11 +98,14 @@ export default function CityPage({ city }: { city: City }) {
             {city.highlight}
           </p>
           <div className="mt-8 flex flex-wrap gap-5">
-            <a href={business.phoneTel} className="cta-primary text-base">
-              Call {business.phone}
-            </a>
-            <Link href="/#contact" className="cta-secondary text-base">
-              Contact us
+            <Link
+              href={`/web-design/${city.slug}`}
+              className="cta-primary text-base"
+            >
+              {city.name} web design
+            </Link>
+            <Link href={seoCtas.bookCall.href} className="cta-secondary text-base">
+              {seoCtas.bookCall.label}
             </Link>
           </div>
         </section>
@@ -144,6 +146,16 @@ export default function CityPage({ city }: { city: City }) {
               </p>
             </article>
           </div>
+          <p className="mt-10 max-w-2xl text-base leading-relaxed text-ink-muted">
+            Looking specifically for website design? See our dedicated{" "}
+            <Link
+              href={`/web-design/${city.slug}`}
+              className="font-semibold text-navy underline decoration-orange/50 underline-offset-4 hover:text-orange"
+            >
+              {city.name} web design
+            </Link>{" "}
+            page.
+          </p>
         </div>
       </section>
 
@@ -164,7 +176,11 @@ export default function CityPage({ city }: { city: City }) {
                 <div>
                   <h3 className="font-display text-2xl font-bold md:text-3xl">
                     <Link
-                      href={`/services/${service.slug}`}
+                      href={
+                        service.slug === "web-design"
+                          ? `/web-design/${city.slug}`
+                          : `/services/${service.slug}`
+                      }
                       className="transition-colors hover:text-orange"
                     >
                       {service.title}
@@ -174,7 +190,11 @@ export default function CityPage({ city }: { city: City }) {
                     {service.copy(city.name)}
                   </p>
                   <Link
-                    href={`/services/${service.slug}`}
+                    href={
+                      service.slug === "web-design"
+                        ? `/web-design/${city.slug}`
+                        : `/services/${service.slug}`
+                    }
                     className="mt-4 inline-block font-display text-sm font-semibold text-orange transition-colors hover:text-paper"
                   >
                     Learn more →
@@ -189,29 +209,37 @@ export default function CityPage({ city }: { city: City }) {
       <section className="border-t border-mist bg-paper">
         <div className="mx-auto max-w-7xl px-5 py-16 md:px-10 md:py-24">
           <h2 className="font-display text-3xl font-extrabold tracking-[-0.03em] text-navy md:text-4xl">
-            FAQ for {city.name} businesses
+            Industries &amp; demos
           </h2>
-          <dl className="mt-10 max-w-3xl space-y-8">
-            {faqs.map((faq) => (
-              <div key={faq.question}>
-                <dt className="font-display text-xl font-bold text-navy">
-                  {faq.question}
-                </dt>
-                <dd className="mt-3 leading-relaxed text-ink-muted">
-                  {faq.answer}
-                </dd>
-              </div>
+          <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2">
+            {industries.map((industry) => (
+              <li key={industry.slug}>
+                <Link
+                  href={`/industries/${industry.slug}`}
+                  className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
+                >
+                  {industry.name}
+                </Link>
+              </li>
             ))}
-          </dl>
+            <li>
+              <Link
+                href="/#work"
+                className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
+              >
+                View demos
+              </Link>
+            </li>
+          </ul>
         </div>
       </section>
 
-      <section className="bg-paper-warm">
-        <div className="mx-auto max-w-7xl px-5 py-16 md:px-10 md:py-24">
-          <h2 className="font-display text-3xl font-extrabold tracking-[-0.03em] text-navy md:text-4xl">
-            Ready to grow in {city.name}?
-          </h2>
-          <p className="mt-4 max-w-xl text-lg leading-relaxed text-ink-muted italic">
+      <SeoFaq title={`FAQ for ${city.name} businesses`} faqs={faqs} />
+
+      <SeoCtaBand
+        title={`Ready to grow in ${city.name}?`}
+        description={
+          <>
             Tell us what you need — a new website, custom software, or a refresh
             that actually brings in work. Call{" "}
             <a
@@ -228,37 +256,33 @@ export default function CityPage({ city }: { city: City }) {
               {business.email}
             </a>
             .
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a href={business.phoneTel} className="cta-primary text-base">
-              Call {business.phone}
-            </a>
-            <Link href="/#contact" className="cta-secondary text-base">
-              Contact Macomb Code
-            </Link>
-          </div>
-
-          {related.length > 0 && (
-            <div className="mt-16 border-t border-mist pt-10">
-              <p className="font-display text-xs font-bold uppercase tracking-[0.18em] text-orange">
-                Nearby areas we serve
-              </p>
-              <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
-                {related.map((item) => (
-                  <li key={item.slug}>
-                    <Link
-                      href={`/cities/${item.slug}`}
-                      className="font-display text-sm font-semibold text-navy transition-colors hover:text-orange"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </section>
+          </>
+        }
+        ctas={defaultSeoCtaList}
+      >
+        <RelatedPages
+          groups={[
+            {
+              title: "Nearby areas we serve",
+              links: related.map((item) => ({
+                href: `/cities/${item.slug}`,
+                label: item.name,
+              })),
+            },
+            {
+              title: "Web design",
+              links: [
+                {
+                  href: `/web-design/${city.slug}`,
+                  label: `${city.name} web design`,
+                },
+                { href: "/book", label: "Book a call" },
+                { href: "/analyze", label: "Free website review" },
+              ],
+            },
+          ]}
+        />
+      </SeoCtaBand>
 
       <Footer />
     </>

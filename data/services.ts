@@ -19,8 +19,8 @@ export type Service = {
 
 export const services: Service[] = [
   {
-    slug: "websites",
-    name: "Websites",
+    slug: "web-design",
+    name: "Web Design",
     eyebrow: "Website retainers",
     headline: "A site that keeps working after launch.",
     intro:
@@ -74,8 +74,8 @@ export const services: Service[] = [
     ],
   },
   {
-    slug: "software",
-    name: "Software",
+    slug: "software-development",
+    name: "Software Development",
     eyebrow: "Software retainers",
     headline: "Custom tools that keep pace with how you operate.",
     intro:
@@ -124,6 +124,61 @@ export const services: Service[] = [
           "Reserved monthly engineering capacity",
           "Priority request queue",
           "Ops and support for the tools we build",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "ai-solutions",
+    name: "AI Solutions",
+    eyebrow: "AI for local operations",
+    headline: "Practical AI that saves hours — not science projects.",
+    intro:
+      "Chat assistants, lead triage, content helpers, and workflow automation built around how your Macomb County business already works.",
+    shortCopy:
+      "AI tools for intake, follow-up, and operations so your team spends less time on repetitive work and more time with customers.",
+    outcomes: [
+      "Assistants that answer common questions and capture leads after hours",
+      "Automation that routes inquiries, quotes, and follow-ups without extra staff",
+      "Content and reporting helpers tuned to your services and voice",
+      "Human oversight so AI stays useful, accurate, and on-brand",
+    ],
+    plans: [
+      {
+        name: "Pilot",
+        priceLabel: "Custom quote",
+        blurb:
+          "A scoped AI pilot — one workflow, clear success criteria, and a short build window.",
+        includes: [
+          "Discovery of the highest-ROI workflow",
+          "Prototype assistant or automation",
+          "Basic integration with your site or inbox",
+          "Review call with next-step recommendations",
+        ],
+      },
+      {
+        name: "Operate",
+        priceLabel: "$1,200/mo",
+        blurb:
+          "Ongoing AI improvement, monitoring, and iteration as your team adopts the tools.",
+        includes: [
+          "Everything from Pilot (if starting fresh)",
+          "Monthly prompt and flow improvements",
+          "Usage monitoring and quality checks",
+          "Async support for the tools we deploy",
+        ],
+        featured: true,
+      },
+      {
+        name: "Scale",
+        priceLabel: "$2,000/mo",
+        blurb:
+          "Multiple workflows, deeper integrations, and priority capacity for AI that runs parts of your operation.",
+        includes: [
+          "Everything in Operate",
+          "Additional assistants or automations",
+          "Deeper CRM / software integrations",
+          "Priority request queue and planning calls",
         ],
       },
     ],
