@@ -12,9 +12,12 @@ export const metadata: Metadata = {
   title: "Harbor Point Family Dental | Booking Demo — Macomb Code",
   description:
     "Demo dental site for Harbor Point Family Dental in St. Clair Shores — online appointment booking integrated with patient intake.",
+  alternates: {
+    canonical: "/demos/harbor-point-dental",
+  },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

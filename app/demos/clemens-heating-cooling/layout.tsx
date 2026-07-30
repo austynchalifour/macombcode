@@ -18,9 +18,12 @@ export const metadata: Metadata = {
   title: "Clemens Heating & Cooling | HVAC Demo — Macomb Code",
   description:
     "Demo HVAC site for Clemens Heating & Cooling in Mount Clemens — ZIP service-area checker and quote form that routes by service type.",
+  alternates: {
+    canonical: "/demos/clemens-heating-cooling",
+  },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

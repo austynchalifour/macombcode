@@ -7,16 +7,20 @@ import { webDesignCityPages } from "@/data/web-design-cities";
 
 export const SITE_URL = "https://macombcode.com";
 
+/** Stable lastmod so sitemaps do not look fully rewritten on every request. */
+const SITEMAP_LASTMOD = new Date("2026-07-30T12:00:00.000Z");
+
 function entry(
   path: string,
   options?: {
     changeFrequency?: MetadataRoute.Sitemap[number]["changeFrequency"];
     priority?: number;
+    lastModified?: Date;
   },
 ): MetadataRoute.Sitemap[number] {
   return {
     url: path.startsWith("http") ? path : `${SITE_URL}${path}`,
-    lastModified: new Date(),
+    lastModified: options?.lastModified ?? SITEMAP_LASTMOD,
     changeFrequency: options?.changeFrequency ?? "monthly",
     priority: options?.priority ?? 0.7,
   };

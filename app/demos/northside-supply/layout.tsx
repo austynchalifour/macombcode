@@ -18,9 +18,12 @@ export const metadata: Metadata = {
   title: "Northside Supply Co. | Retail Demo — Macomb Code",
   description:
     "Demo retail site for Northside Supply Co. in Romeo — searchable in-stock product catalog with filters and call-to-order.",
+  alternates: {
+    canonical: "/demos/northside-supply",
+  },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

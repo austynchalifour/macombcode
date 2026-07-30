@@ -18,9 +18,12 @@ export const metadata: Metadata = {
   title: "Romeo & Vine | Italian Wine Bar — Demo by Macomb Code",
   description:
     "Demo restaurant site for Romeo & Vine — a family-owned Italian wine bar in Romeo, Michigan. Live CMS menu, daily specials, and a working reservation widget.",
+  alternates: {
+    canonical: "/demos/romeo-and-vine",
+  },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

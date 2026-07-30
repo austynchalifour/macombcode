@@ -1,10 +1,10 @@
-import { buildCitiesSitemap, sitemapToXml } from "@/lib/sitemaps";
+import { buildMainSitemap, sitemapToXml } from "@/lib/sitemaps";
 
 export const revalidate = 86400;
 
-/** Separate XML sitemap for all Macomb County city pages. */
+/** Main XML sitemap — marketing, services, web-design, industries, demos. */
 export function GET() {
-  const xml = sitemapToXml(buildCitiesSitemap());
+  const xml = sitemapToXml(buildMainSitemap());
   return new Response(xml, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",

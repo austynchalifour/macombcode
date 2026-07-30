@@ -8,6 +8,8 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         "/admin",
         "/api/admin",
+        "/api/",
+        "/offer/success",
         "/demos/dump-daddy",
         "/demos/precision-paving",
       ],
@@ -16,5 +18,6 @@ export default function robots(): MetadataRoute.Robots {
       "https://macombcode.com/sitemap.xml",
       "https://macombcode.com/sitemap-cities.xml",
     ],
+    host: "https://macombcode.com",
   };
 }
