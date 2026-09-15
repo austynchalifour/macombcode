@@ -49,6 +49,14 @@ export const projects: Project[] = [
     url: "/demos/van-dyke-electric",
   },
   {
+    name: "Lakeside CPL",
+    type: "Training demo",
+    result:
+      "A Harrison Township Michigan CPL training site with a course pathfinder and enrollment that routes first-time licenses separately from renewals and private lessons — the front desk a student needs before class day.",
+    tone: "bg-band-a",
+    url: "/demos/lakeside-cpl",
+  },
+  {
     name: "CalculatorDepot",
     type: "Programmatic SEO",
     result:

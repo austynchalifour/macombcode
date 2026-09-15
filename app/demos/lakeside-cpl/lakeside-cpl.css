@@ -1,0 +1,265 @@
+.lcpl-root {
+  --lcpl-ink: #1a2118;
+  --lcpl-deep: #12170f;
+  --lcpl-olive: #2f3d28;
+  --lcpl-brass: #b08a3c;
+  --lcpl-brass-hot: #c49a48;
+  --lcpl-moss: #5a6e4a;
+  --lcpl-paper: #f4f1ea;
+  --lcpl-bone: #ebe6db;
+  --lcpl-muted: #5f6658;
+  --lcpl-mist: #a8b09e;
+
+  color: var(--lcpl-ink);
+  background: var(--lcpl-bone);
+  font-family: var(--font-lcpl-body), "Segoe UI", sans-serif;
+}
+
+.lcpl-root ::selection {
+  background: color-mix(in srgb, var(--lcpl-brass) 45%, transparent);
+  color: var(--lcpl-ink);
+}
+
+.lcpl-display {
+  font-family: var(--font-lcpl-display), "Arial Narrow", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.92;
+}
+
+.lcpl-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.1;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+@keyframes lcpl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lcpl-kenburns {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.lcpl-rise {
+  animation: lcpl-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lcpl-rise-1 {
+  animation-delay: 0.1s;
+}
+
+.lcpl-rise-2 {
+  animation-delay: 0.2s;
+}
+
+.lcpl-rise-3 {
+  animation-delay: 0.3s;
+}
+
+.lcpl-hero-image {
+  animation: lcpl-kenburns 16s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lcpl-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lcpl-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lcpl-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lcpl-brass);
+  color: var(--lcpl-deep);
+  font-family: var(--font-lcpl-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.5rem;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.lcpl-cta:hover {
+  background: var(--lcpl-brass-hot);
+  transform: translateY(-1px);
+}
+
+.lcpl-cta:disabled {
+  opacity: 0.65;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.lcpl-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-lcpl-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 0.25rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--lcpl-brass) 70%, transparent);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.lcpl-cta-ghost:hover {
+  color: var(--lcpl-brass);
+  border-color: var(--lcpl-brass);
+}
+
+.lcpl-cta-line {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lcpl-ink);
+  font-family: var(--font-lcpl-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 0.25rem;
+  border-bottom: 2px solid var(--lcpl-ink);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.lcpl-cta-line:hover {
+  color: var(--lcpl-brass);
+  border-color: var(--lcpl-brass);
+}
+
+.lcpl-field {
+  width: 100%;
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--lcpl-ink) 16%, transparent);
+  border-radius: 0;
+  color: var(--lcpl-ink);
+  font: inherit;
+  padding: 0.85rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lcpl-field:focus {
+  border-color: var(--lcpl-brass);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lcpl-brass) 22%, transparent);
+}
+
+.lcpl-field::placeholder {
+  color: var(--lcpl-muted);
+}
+
+.lcpl-nav-link {
+  color: #fff;
+  font-family: var(--font-lcpl-display), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.lcpl-nav-link:hover {
+  color: var(--lcpl-brass);
+}
+
+.lcpl-demo-banner {
+  position: relative;
+  z-index: 30;
+  background: var(--lcpl-deep);
+  color: var(--lcpl-mist);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid var(--lcpl-brass);
+}
+
+.lcpl-demo-banner a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.lcpl-demo-banner-link {
+  color: #fff;
+  border-bottom: 1px solid var(--lcpl-brass);
+  padding-bottom: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.lcpl-demo-banner-link:hover {
+  color: var(--lcpl-brass);
+  border-color: var(--lcpl-brass);
+}
+
+.lcpl-demo-banner-back {
+  color: color-mix(in srgb, var(--lcpl-mist) 80%, transparent);
+  transition: color 0.2s ease;
+}
+
+.lcpl-demo-banner-back:hover {
+  color: #fff;
+}
+
+.lcpl-panel {
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--lcpl-ink) 10%, transparent);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--lcpl-ink) 10%, transparent);
+}
+
+.lcpl-service-row {
+  border-top: 1px solid color-mix(in srgb, var(--lcpl-ink) 10%, transparent);
+}
+
+.lcpl-service-row:last-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--lcpl-ink) 10%, transparent);
+}
+
+.lcpl-path {
+  width: 100%;
+  text-align: left;
+  background: color-mix(in srgb, #fff 6%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 12%, transparent);
+  color: #fff;
+  padding: 1rem 1.1rem;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.lcpl-path:hover,
+.lcpl-path.is-active {
+  border-color: var(--lcpl-brass);
+  background: color-mix(in srgb, var(--lcpl-brass) 12%, transparent);
+}
+
+.lcpl-status {
+  background: color-mix(in srgb, var(--lcpl-moss) 12%, #fff);
+  border-left: 4px solid var(--lcpl-moss);
+}

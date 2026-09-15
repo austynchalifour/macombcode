@@ -24,6 +24,7 @@ const demoPaths: Record<string, string> = {
   "northside-supply": "/demos/northside-supply",
   "precision-paving": "/demos/precision-paving",
   "van-dyke-electric": "/demos/van-dyke-electric",
+  "lakeside-cpl": "/demos/lakeside-cpl",
 };
 
 type Props = {
