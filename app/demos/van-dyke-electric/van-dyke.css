@@ -1,0 +1,297 @@
+.vde-root {
+  --vde-ink: #0b0c0e;
+  --vde-char: #14161a;
+  --vde-slate: #2a2d33;
+  --vde-copper: #c47a3a;
+  --vde-copper-hot: #d88945;
+  --vde-amp: #f0b429;
+  --vde-bone: #f3eee6;
+  --vde-paper: #faf7f2;
+  --vde-muted: #6b6560;
+  --vde-mist: #b8b0a6;
+
+  color: var(--vde-ink);
+  background: var(--vde-bone);
+  font-family: var(--font-vde-body), "Segoe UI", sans-serif;
+}
+
+.vde-root ::selection {
+  background: color-mix(in srgb, var(--vde-amp) 55%, transparent);
+  color: var(--vde-ink);
+}
+
+.vde-display {
+  font-family: var(--font-vde-display), "Arial Narrow", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.92;
+}
+
+.vde-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.11;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+@keyframes vde-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vde-kenburns {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.vde-rise {
+  animation: vde-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.vde-rise-1 {
+  animation-delay: 0.1s;
+}
+
+.vde-rise-2 {
+  animation-delay: 0.2s;
+}
+
+.vde-rise-3 {
+  animation-delay: 0.3s;
+}
+
+.vde-hero-image {
+  animation: vde-kenburns 16s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.vde-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vde-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.vde-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vde-amp);
+  color: var(--vde-ink);
+  font-family: var(--font-vde-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.5rem;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.vde-cta:hover {
+  background: #ffc247;
+  transform: translateY(-1px);
+}
+
+.vde-cta:disabled {
+  opacity: 0.65;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.vde-cta-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vde-copper);
+  color: #fff;
+  font-family: var(--font-vde-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.5rem;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.vde-cta-danger:hover {
+  background: var(--vde-copper-hot);
+  transform: translateY(-1px);
+}
+
+.vde-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-vde-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 0.25rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--vde-amp) 70%, transparent);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.vde-cta-ghost:hover {
+  color: var(--vde-amp);
+  border-color: var(--vde-amp);
+}
+
+.vde-cta-line {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vde-ink);
+  font-family: var(--font-vde-display), sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.95rem 0.25rem;
+  border-bottom: 2px solid var(--vde-ink);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.vde-cta-line:hover {
+  color: var(--vde-copper);
+  border-color: var(--vde-copper);
+}
+
+.vde-field {
+  width: 100%;
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--vde-ink) 16%, transparent);
+  border-radius: 0;
+  color: var(--vde-ink);
+  font: inherit;
+  padding: 0.85rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vde-field:focus {
+  border-color: var(--vde-copper);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vde-copper) 22%, transparent);
+}
+
+.vde-field::placeholder {
+  color: var(--vde-muted);
+}
+
+.vde-nav-link {
+  color: #fff;
+  font-family: var(--font-vde-display), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.vde-nav-link:hover {
+  color: var(--vde-amp);
+}
+
+.vde-demo-banner {
+  position: relative;
+  z-index: 30;
+  background: var(--vde-ink);
+  color: var(--vde-mist);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid var(--vde-amp);
+}
+
+.vde-demo-banner a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.vde-demo-banner-link {
+  color: #fff;
+  border-bottom: 1px solid var(--vde-amp);
+  padding-bottom: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.vde-demo-banner-link:hover {
+  color: var(--vde-amp);
+  border-color: var(--vde-amp);
+}
+
+.vde-demo-banner-back {
+  color: color-mix(in srgb, var(--vde-mist) 80%, transparent);
+  transition: color 0.2s ease;
+}
+
+.vde-demo-banner-back:hover {
+  color: #fff;
+}
+
+.vde-panel {
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--vde-ink) 10%, transparent);
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--vde-ink) 10%, transparent);
+}
+
+.vde-service-row {
+  border-top: 1px solid color-mix(in srgb, var(--vde-ink) 10%, transparent);
+}
+
+.vde-service-row:last-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--vde-ink) 10%, transparent);
+}
+
+.vde-symptom {
+  width: 100%;
+  text-align: left;
+  background: color-mix(in srgb, #fff 6%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 12%, transparent);
+  color: #fff;
+  padding: 1rem 1.1rem;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.vde-symptom:hover,
+.vde-symptom.is-active {
+  border-color: var(--vde-amp);
+  background: color-mix(in srgb, var(--vde-amp) 10%, transparent);
+}
+
+.vde-status-emergency {
+  background: color-mix(in srgb, var(--vde-copper) 14%, #fff);
+  border-left: 4px solid var(--vde-copper);
+}
+
+.vde-status-urgent {
+  background: color-mix(in srgb, var(--vde-amp) 16%, #fff);
+  border-left: 4px solid var(--vde-amp);
+}
+
+.vde-status-schedule {
+  background: color-mix(in srgb, #1f8a4c 12%, #fff);
+  border-left: 4px solid #1f8a4c;
+}

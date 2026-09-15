@@ -204,7 +204,7 @@ export const industries: Industry[] = [
           "We build on-page structure and local landing paths aimed at high-intent contractor searches in the cities you serve.",
       },
     ],
-    relatedDemoSlugs: ["northside-supply"],
+    relatedDemoSlugs: ["northside-supply", "van-dyke-electric"],
   },
 ];
 

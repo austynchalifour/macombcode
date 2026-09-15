@@ -19,6 +19,7 @@ const demoPaths: Record<string, string> = {
   "harbor-point-dental": "/demos/harbor-point-dental",
   "northside-supply": "/demos/northside-supply",
   "precision-paving": "/demos/precision-paving",
+  "van-dyke-electric": "/demos/van-dyke-electric",
 };
 
 export default function IndustryPage({ industry }: { industry: Industry }) {

@@ -41,6 +41,14 @@ export const projects: Project[] = [
     url: "/demos/northside-supply",
   },
   {
+    name: "Van Dyke Electric",
+    type: "Home services demo",
+    result:
+      "A Warren electrical site with an emergency triage tool and a quote form that routes sparks separately from EV-charger installs — the dispatcher a homeowner needs at 2am.",
+    tone: "bg-band-c",
+    url: "/demos/van-dyke-electric",
+  },
+  {
     name: "CalculatorDepot",
     type: "Programmatic SEO",
     result:

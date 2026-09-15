@@ -77,6 +77,7 @@ export function buildMainSitemap(): MetadataRoute.Sitemap {
     entry("/demos/clemens-heating-cooling", { priority: 0.6 }),
     entry("/demos/harbor-point-dental", { priority: 0.6 }),
     entry("/demos/northside-supply", { priority: 0.6 }),
+    entry("/demos/van-dyke-electric", { priority: 0.6 }),
     ...serviceEntries,
     ...webDesignCityEntries,
     ...industryEntries,
@@ -211,6 +212,7 @@ export function getSiteMapGroups() {
         },
         { href: "/demos/harbor-point-dental", label: "Harbor Point Dental" },
         { href: "/demos/northside-supply", label: "Northside Supply" },
+        { href: "/demos/van-dyke-electric", label: "Van Dyke Electric" },
       ],
     },
   ] as const;
