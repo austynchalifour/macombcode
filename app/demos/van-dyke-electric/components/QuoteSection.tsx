@@ -5,7 +5,7 @@ import Reveal from "./Reveal";
 export default function QuoteSection() {
   return (
     <section id="quote" className="bg-[var(--vde-paper)]">
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-2 md:gap-12 md:px-8 md:py-28">
+      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-2 md:items-start md:gap-12 md:px-8 md:py-16">
         <Reveal>
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--vde-copper)]">

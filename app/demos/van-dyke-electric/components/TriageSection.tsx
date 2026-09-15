@@ -5,7 +5,7 @@ import TriageTool from "./TriageTool";
 export default function TriageSection() {
   return (
     <section id="triage" className="bg-[var(--vde-ink)] text-white">
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-2 md:items-start md:gap-12 md:px-8 md:py-28">
+      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-2 md:items-start md:gap-12 md:px-8 md:py-16">
         <Reveal>
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--vde-amp)]">
@@ -23,7 +23,7 @@ export default function TriageSection() {
               nuisance. This tool answers before they waste a call — and tags
               the lead so emergency never sits behind an EV-charger quote.
             </p>
-            <div className="relative mt-10 aspect-[4/3] overflow-hidden">
+            <div className="relative mt-6 hidden aspect-[16/10] overflow-hidden md:block">
               <Image
                 src="/demos/van-dyke-electric/charger.png"
                 alt="Electrician installing a Level 2 EV charger in a garage"

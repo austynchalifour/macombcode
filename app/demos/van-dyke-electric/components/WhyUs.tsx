@@ -4,7 +4,7 @@ import Reveal from "./Reveal";
 export default function WhyUs() {
   return (
     <section id="why" className="bg-[var(--vde-paper)]">
-      <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
         <Reveal>
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--vde-copper)]">
             Why Van Dyke
@@ -14,7 +14,7 @@ export default function WhyUs() {
           </h2>
         </Reveal>
 
-        <ul className="mt-14 grid gap-10 sm:grid-cols-2">
+        <ul className="mt-8 grid gap-8 sm:grid-cols-2">
           {promises.map((item, i) => (
             <li key={item.title}>
               <Reveal>

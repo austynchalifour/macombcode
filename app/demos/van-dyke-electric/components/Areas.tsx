@@ -4,7 +4,7 @@ import Reveal from "./Reveal";
 export default function Areas() {
   return (
     <section id="areas" className="bg-[var(--vde-bone)]">
-      <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
         <Reveal>
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--vde-copper)]">
             Service area
@@ -19,7 +19,7 @@ export default function Areas() {
         </Reveal>
 
         <Reveal>
-          <ul className="mt-12 flex flex-wrap gap-x-6 gap-y-3">
+          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
             {areas.map((area) => (
               <li
                 key={area}
